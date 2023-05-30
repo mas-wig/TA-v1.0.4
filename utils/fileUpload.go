@@ -5,13 +5,13 @@ import (
 	"mime/multipart"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/google/uuid"
 )
 
 func SaveUploadedFile(file *multipart.FileHeader) (string, error) {
 	ext := filepath.Ext(file.Filename)
-	// Membangun path tujuan file
 	filename := uuid.New().String() + ext
 	dst := filepath.Join("public", "assets", "uploads", "img", filename)
 	// Membuat folder "static/img" jika belum ada
@@ -20,7 +20,6 @@ func SaveUploadedFile(file *multipart.FileHeader) (string, error) {
 		return "", err
 	}
 
-	// Membuka file yang diunggah
 	src, err := file.Open()
 	if err != nil {
 		return "", err
@@ -41,5 +40,6 @@ func SaveUploadedFile(file *multipart.FileHeader) (string, error) {
 	}
 
 	// Mengembalikan URL lengkap file yang tersimpan
-	return filepath.Join("/", dst), nil
+	newDst := strings.ReplaceAll(dst, "public", "")
+	return filepath.Join("/", newDst), nil
 }

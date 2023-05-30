@@ -51,7 +51,6 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 		}
 		photoURL = url
 	}
-
 	now := time.Now()
 
 	newUser := models.User{
