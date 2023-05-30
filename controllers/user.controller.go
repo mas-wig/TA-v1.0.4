@@ -1,0 +1,39 @@
+package controllers
+
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
+	"github.com/mas-wig/ta-v1.0.4/models"
+	"gorm.io/gorm"
+)
+
+type UserController struct {
+	DB *gorm.DB
+}
+
+func NewUserController(DB *gorm.DB) UserController {
+	return UserController{DB}
+}
+
+func (uc *UserController) GetMe(ctx *gin.Context) {
+	currentUser := ctx.MustGet("currentUser").(models.User)
+	userID, err := uuid.Parse(currentUser.ID)
+	if err != nil {
+		panic("UUID kosong ")
+	}
+
+	userResponse := &models.UserResponse{
+		ID:        userID,
+		Name:      currentUser.Name,
+		Email:     currentUser.Email,
+		Photo:     currentUser.Photo,
+		Role:      currentUser.Role,
+		Provider:  currentUser.Provider,
+		CreatedAt: currentUser.CreatedAt,
+		UpdatedAt: currentUser.UpdatedAt,
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"status": "success", "data": gin.H{"user": userResponse}})
+}
