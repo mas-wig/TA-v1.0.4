@@ -13,7 +13,7 @@ func SaveUploadedFile(file *multipart.FileHeader) (string, error) {
 	ext := filepath.Ext(file.Filename)
 	// Membangun path tujuan file
 	filename := uuid.New().String() + ext
-	dst := filepath.Join("static", "img", filename)
+	dst := filepath.Join("public", "assets", "uploads", "img", filename)
 	// Membuat folder "static/img" jika belum ada
 	err := os.MkdirAll(filepath.Dir(dst), os.ModePerm)
 	if err != nil {
