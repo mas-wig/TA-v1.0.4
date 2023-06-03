@@ -8,8 +8,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/mas-wig/ta-v1.0.4/models"
 	"gorm.io/gorm"
+
+	"github.com/mas-wig/ta-v1.0.4/models"
 )
 
 type PostController struct {
@@ -105,33 +106,29 @@ func (pc *PostController) FindPostByID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"status": "success", "data": post})
 }
 
-func (pc *PostController) FindPosts(ctx *gin.Context) {
-	var page = ctx.DefaultQuery("page", "1")
-	var limit = ctx.DefaultQuery("limit", "10")
-
-	intPage, _ := strconv.Atoi(page)
-	intLimit, _ := strconv.Atoi(limit)
-	offset := (intPage - 1) * intLimit
-
+func (pc *PostController) GetAllPosts(ctx *gin.Context) {
 	var posts []models.Post
-	results := pc.DB.Limit(intLimit).Offset(offset).Find(&posts)
-	if results.Error != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": results.Error})
-		return
-	}
+	var count int64
+	pc.DB.Model(&models.Post{}).Count(&count)
+	page := ctx.DefaultQuery("page", "1")
+	newpage, _ := strconv.Atoi(page)
+	limit := 5
+	offset := (newpage - 1) * limit
+	pc.DB.Limit(limit).Offset(offset).Find(&posts)
 
-	ctx.JSON(http.StatusOK, gin.H{"status": "success", "results": len(posts), "data": posts})
+	ctx.HTML(http.StatusOK, "presensi.html", gin.H{
+		"Posts": posts,
+		"Count": count,
+		"Page":  page,
+	})
 }
 
 func (pc *PostController) DeletePost(ctx *gin.Context) {
-	postID := ctx.Param("postID")
-
+	postID := ctx.Param("postId")
 	result := pc.DB.Delete(&models.Post{}, "id = ?", postID)
-
 	if result.Error != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": "No post with that title exists"})
 		return
 	}
-
-	ctx.JSON(http.StatusNoContent, nil)
+	ctx.Redirect(http.StatusFound, "/api/posts")
 }

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8" />
+    <title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
+
+    <!-- Site favicon -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/vendors/images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/vendors/images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/vendors/images/favicon-16x16.png"
+    />
+
+    <!-- Mobile Specific Metas -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="/vendors/styles/core.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/vendors/styles/icon-font.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="/vendors/styles/style.css" />
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-GBZ3SGGX85"
+    ></script>
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2973766580778258"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-GBZ3SGGX85");
+    </script>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-NXZMQSS");
+    </script>
+    <!-- End Google Tag Manager -->
+  </head>
+  <body>
+    <div class="header">
+      <div class="header-left">
+        <div class="menu-icon bi bi-list"></div>
+      </div>
+      <div class="header-right">
+        <div class="user-info-dropdown">
+          <div class="dropdown">
+            <a
+              class="dropdown-toggle"
+              href="#"
+              role="button"
+              data-toggle="dropdown"
+            >
+              <span class="user-icon">
+                <img src="/vendors/images/photo1.jpg" alt="" />
+              </span>
+              <span class="user-name">ross c. lopez</span>
+            </a>
+            <div
+              class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list"
+            >
+              <a class="dropdown-item" href="profile.html"
+                ><i class="dw dw-user1"></i> profile</a
+              >
+              <a class="dropdown-item" href="login.html"
+                ><i class="dw dw-logout"></i> log out</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="left-side-bar">
+      <div class="brand-logo">
+        <a href="index.html">
+          <img src="/vendors/images/deskapp-logo.svg" alt="" class="dark-logo" />
+          <img
+            src="/vendors/images/deskapp-logo-white.svg"
+            alt=""
+            class="light-logo"
+          />
+        </a>
+        <div class="close-sidebar" data-toggle="left-sidebar-close">
+          <i class="ion-close-round"></i>
+        </div>
+      </div>
+      <div class="menu-block customscroll">
+        <!-- SETUP SIDEBAR -->
+
+        <div class="sidebar-menu">
+          <ul id="accordion-menu">
+            <li>
+              <a href="#" class="dropdown-toggle no-arrow">
+                <span class="micon bi bi-calendar4-week"></span
+                ><span class="mtext">Dashboard</span>
+              </a>
+            </li>
+            <li class="dropdown">
+              <a href="javascript:;" class="dropdown-toggle">
+                <span class="micon bi bi-textarea-resize"></span
+                ><span class="mtext">Input Data</span>
+              </a>
+              <ul class="submenu">
+                <li><a href="form-basic.html">Absensi</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="javascript:;" class="dropdown-toggle">
+                <span class="micon bi bi-lock"></span
+                ><span class="mtext">Enkripsi</span>
+              </a>
+              <ul class="submenu">
+                <li><a href="datatable.html">Absensi</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="javascript:;" class="dropdown-toggle">
+                <span class="micon bi bi-unlock"></span
+                ><span class="mtext">Dekripsi</span>
+              </a>
+              <ul class="submenu">
+                <li><a href="datatable.html">Absensi</a></li>
+              </ul>
+            </li>
+            <li>
+              <div class="dropdown-divider"></div>
+            </li>
+            <li>
+              <div class="sidebar-small-cap">Extra</div>
+            </li>
+            <li>
+              <a href="javascript:;" class="dropdown-toggle">
+                <span class="micon bi bi-file-pdf"></span
+                ><span class="mtext">Documentation</span>
+              </a>
+              <ul class="submenu">
+                <li><a href="introduction.html">Introduction</a></li>
+                <li><a href="getting-started.html">Getting Started</a></li>
+              </ul>
+            </li>
+            <li>
+              <a
+                href="https://dropways.github.io/deskapp-free-single-page-website-template/"
+                target="_blank"
+                class="dropdown-toggle no-arrow"
+              >
+                <span class="micon bi bi-question-octagon"></span>
+                <span class="mtext">Help </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="mobile-menu-overlay"></div>
+
+    <div class="main-container">
+      <div class="pd-ltr-20 xs-pd-20-10">
+        <div class="min-height-200px">
+          <div class="page-header">
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <div class="title">
+                  <h4>Introduction</h4>
+                </div>
+                <nav aria-label="breadcrumb" role="navigation">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                      <a href="index.html">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                      <a href="javascript:;">Documentation</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                      introduction
+                    </li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+          </div>
+          <div class="pd-20 card-box mb-30">
+            <h4 class="h4 text-blue mb-10">Introduction</h4>
+            <p>
+              DeskApp admin is a popular open source WebApp template for admin
+              dashboards and control panels. DeskApp is fully responsive HTML
+              template, which is based on the CSS framework Bootstrap 4. It
+              utilizes all of the Bootstrap components in its design and
+              re-styles many commonly used plugins to create a consistent design
+              that can be used as a user interface for backend applications.
+              DeskApp is based on a modular design, which allows it to be easily
+              customized and built upon. This documentation will guide you
+              through installing the template and exploring the various
+              components that are bundled with the template.
+            </p>
+            <p>
+              We put a lot of love and effort to make DeskApp Admin a useful
+              template for everyone and now It comes with New Ui. We are keen to
+              release continuous long term updates and lots of new features will
+              be coming soon in the future releases
+            </p>
+          </div>
+          <div class="pd-20 card-box mb-30">
+            <h4 class="h4 text-blue mb-10">Support</h4>
+            <p>
+              For others, you can explore the component pages in the template,
+              and you can get the code structure of the component.
+            </p>
+            <p>
+              Also, you can make component requests or new features and we will
+              consider them.
+            </p>
+            <p>
+              If you find a bug or think of something cool to make Stisa better,
+              please
+              <a
+                href="https://github.com/dropways/deskapp/issues"
+                target="_blank"
+                class="text-primary"
+                >create an issue.</a
+              >
+            </p>
+          </div>
+          <h4 class="h4 text-blue mb-10">Note</h4>
+          <div
+            class="pd-20 card-box mb-30"
+            data-bgcolor="#ff4747"
+            data-color="#fdfdfd"
+          >
+            <ul>
+              <li class="d-flex pb-20">
+                <i class="dw dw-edit-file font-20 mr-2"></i> We have used our
+                name and brand as credit in CSS / Js we have created, you need
+                to change / remove that if you want while using in your personal
+                or client projects.
+              </li>
+              <li class="d-flex pb-20">
+                <i class="dw dw-edit-file font-20 mr-2"></i> You will find name
+                and brand of each third-party tools we have used, as credit in
+                their respective css / js, you can remove or change as per your
+                need.
+              </li>
+              <li class="d-flex pb-20">
+                <i class="dw dw-edit-file font-20 mr-2"></i> We have used
+                third-party tools / plugins in our templates, you will find
+                links from left navigation (menu) as Third Party Tools and you
+                can find their documentation from their respective websites link
+                we have given.
+              </li>
+              <li class="d-flex pb-20">
+                <i class="dw dw-edit-file font-20 mr-2"></i> We do not offer
+                support on any third-party plugins / tools we have used.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- js -->
+    <script src="/vendors/scripts/core.js"></script>
+    <script src="/vendors/scripts/script.min.js"></script>
+    <script src="/vendors/scripts/process.js"></script>
+    <script src="/vendors/scripts/layout-settings.js"></script>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-NXZMQSS"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+  </body>
+</html>

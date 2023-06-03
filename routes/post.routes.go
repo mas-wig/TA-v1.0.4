@@ -18,9 +18,9 @@ func (pc *PostRouteController) PostRoute(rg *gin.RouterGroup) {
 
 	router := rg.Group("posts")
 	router.Use(middleware.DeserializeUser())
-	router.POST("/", pc.postController.CreatePost)
-	router.GET("/", pc.postController.FindPosts)
-	router.PUT("/:postId", pc.postController.UpdatePost)
-	router.GET("/:postId", pc.postController.FindPostByID)
-	router.DELETE("/:postId", pc.postController.DeletePost)
+	router.POST("/create", pc.postController.CreatePost)
+	router.GET("/", pc.postController.GetAllPosts)
+	router.PUT("/update/:postId", pc.postController.UpdatePost)
+	router.GET("/find/:postId", pc.postController.FindPostByID)
+	router.POST("/delete/:postId", pc.postController.DeletePost)
 }

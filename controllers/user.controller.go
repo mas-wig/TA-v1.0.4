@@ -23,7 +23,6 @@ func (uc *UserController) GetMe(ctx *gin.Context) {
 	if err != nil {
 		panic("UUID kosong ")
 	}
-
 	userResponse := &models.UserResponse{
 		ID:        userID,
 		Name:      currentUser.Name,
@@ -36,4 +35,8 @@ func (uc *UserController) GetMe(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"status": "success", "data": gin.H{"user": userResponse}})
+}
+
+func (uc *UserController) UserDashboard(ctx *gin.Context) {
+	ctx.HTML(http.StatusOK, "index.html", gin.H{})
 }

@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"net/http"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -46,7 +45,7 @@ func init() {
 func main() {
 	config, err := initializers.LoadConfig(".")
 	if err != nil {
-		log.Fatal("🚀 Could not load environment variables", err)
+		log.Fatal(".env file tidak ditemukan", err)
 	}
 
 	corsConfig := cors.DefaultConfig()
@@ -54,16 +53,18 @@ func main() {
 	corsConfig.AllowCredentials = true
 
 	server.Use(cors.New(corsConfig))
-	server.LoadHTMLGlob("public/templates/*")
 
-	router := server.Group("/api")
-	router.GET("/healthchecker", func(ctx *gin.Context) {
-		message := "Welcome to Golang with Gorm and Postgres"
-		ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": message})
-	})
+	server.Static("/src/", "./public/src/")
+	server.Static("/vendors/", "./public/vendors/")
 
-	AuthRouteController.AuthRoute(router)
-	UserRouteController.UserRoute(router)
-	PostRouteController.PostRoute(router)
+	server.LoadHTMLGlob("./public/templates/*.html")
+
+	api := server.Group("/api")
+	AuthRouteController.AuthRoute(api)
+	UserRouteController.UserRouteProfile(api)
+	PostRouteController.PostRoute(api)
+
+	router := server.Group("/")
+	UserRouteController.UserRouteDashboard(router)
 	log.Fatal(server.Run(":" + config.ServerPort))
 }

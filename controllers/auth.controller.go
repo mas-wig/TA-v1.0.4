@@ -107,11 +107,10 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 // [...] SignIn User
 func (ac *AuthController) SignInUser(ctx *gin.Context) {
 	var payload *models.SignInInput
-	if err := ctx.ShouldBindJSON(&payload); err != nil {
+	if err := ctx.ShouldBind(&payload); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return
 	}
-
 	var user models.User
 	result := ac.DB.First(&user, "email = ?", strings.ToLower(payload.Email))
 	if result.Error != nil {
@@ -139,9 +138,7 @@ func (ac *AuthController) SignInUser(ctx *gin.Context) {
 	}
 
 	ctx.SetCookie("access_token", token, config.TokenMaxAge*60, "/", "localhost", false, true)
-
-	// Redirect menggunakan ctx
-	ctx.Redirect(http.StatusFound, "/api/users/me")
+	ctx.Redirect(http.StatusFound, "/users/dashboard")
 }
 
 // [...] SignOut User

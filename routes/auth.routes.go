@@ -24,6 +24,9 @@ func (rc *AuthRouteController) AuthRoute(rg *gin.RouterGroup) {
 	router.GET("/logout", middleware.DeserializeUser(), rc.authController.LogoutUser)
 	router.GET("/verifyemail/:verificationCode", rc.authController.VerifyEmail)
 
+	router.GET("/signin", func(ctx *gin.Context) {
+		ctx.HTML(http.StatusOK, "login.html", gin.H{})
+	})
 	router.GET("/signup", func(ctx *gin.Context) {
 		ctx.HTML(http.StatusOK, "register.html", gin.H{})
 	})
