@@ -100,15 +100,15 @@
     >
       <div class="container">
         <div class="row align-items-center">
-          <div class="col-md-6 col-lg-7">
-            <img src="/vendors/images/login-page-img.png" alt="" />
+          <div class="col-md-7 col-lg-6">
+            <img src="/vendors/images/login-pencak-silat.png" alt="" />
           </div>
           <div class="col-md-6 col-lg-5">
             <div class="login-box bg-white box-shadow border-radius-10">
               <div class="login-title">
-                <h2 class="text-center text-primary">Login To DeskApp</h2>
+                <h2 class="text-center text-primary">Login IKSPI Rembang</h2>
               </div>
-              <form method="post" action="/api/auth/login">
+              <form method="post" action="{{.endpoint}}">
                 <div class="select-role">
                   <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn active">
@@ -120,8 +120,8 @@
                           alt=""
                         />
                       </div>
-                      <span>I'm</span>
-                      Manager
+                      <span>Saya</span>
+                      Admin
                     </label>
                     <label class="btn">
                       <input type="radio" name="options" id="user" />
@@ -132,8 +132,8 @@
                           alt=""
                         />
                       </div>
-                      <span>I'm</span>
-                      Employee
+                      <span>Saya</span>
+                      Warga/Siswa
                     </label>
                   </div>
                 </div>
@@ -180,17 +180,13 @@
                   </div>
                   <div class="col-6">
                     <div class="forgot-password">
-                      <a href="forgot-password.html">Forgot Password</a>
+                      <a href="forgot-password.html">Lupa Password</a>
                     </div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-sm-12">
                     <div class="input-group mb-0">
-                      <!--
-											use code for form submit
-											<input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
-										-->
                       <input
                         class="btn btn-primary btn-lg btn-block"
                         type="submit"

@@ -11,7 +11,6 @@ import (
 	"github.com/mas-wig/ta-v1.0.4/utils"
 )
 
-
 func DeserializeUser() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var accessToken string

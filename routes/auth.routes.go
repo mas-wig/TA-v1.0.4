@@ -25,7 +25,7 @@ func (rc *AuthRouteController) AuthRoute(rg *gin.RouterGroup) {
 	router.GET("/verifyemail/:verificationCode", rc.authController.VerifyEmail)
 
 	router.GET("/signin", func(ctx *gin.Context) {
-		ctx.HTML(http.StatusOK, "login.html", gin.H{})
+		ctx.HTML(http.StatusOK, "login.html", gin.H{"endpoint": "/api/auth/login"})
 	})
 	router.GET("/signup", func(ctx *gin.Context) {
 		ctx.HTML(http.StatusOK, "register.html", gin.H{})
