@@ -37,6 +37,7 @@ type SignUpInput struct {
 type SignInInput struct {
 	Email    string `form:"email"  binding:"required"`
 	Password string `form:"password"  binding:"required"`
+	Role     string `form:"role" binding:"required"`
 }
 
 type UserResponse struct {

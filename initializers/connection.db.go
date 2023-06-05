@@ -17,7 +17,7 @@ func ConnectDB(config *Config) {
 
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatal("Failed to connect to the Database")
+		log.Fatal("Gagal konek database")
 	}
-	fmt.Println("🚀 Connected Successfully to the Database")
+	fmt.Println("Sukses konek database")
 }

@@ -106,7 +106,7 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, gin.H{"status": "success", "message": message})
 }
 
-// [...] SignIn User
+// Login
 func (ac *AuthController) SignInUser(ctx *gin.Context) {
 	var payload *models.SignInInput
 	if err := ctx.ShouldBind(&payload); err != nil {
@@ -114,8 +114,8 @@ func (ac *AuthController) SignInUser(ctx *gin.Context) {
 		return
 	}
 	var user models.User
-	result := ac.DB.First(&user, "email = ?", strings.ToLower(payload.Email))
-	if result.Error != nil {
+
+	if err := ac.DB.Where("email = ? AND role = ?", payload.Email, payload.Role).First(&user).Error; err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Invalid email or Password"})
 		return
 	}
