@@ -9,24 +9,29 @@ import (
 
 type User struct {
 	ID               string    `gorm:"type:varchar(36);default:uuid();primary_key"`
-	Name             string    `gorm:"type:varchar(255);not null"`
 	Email            string    `gorm:"type:varchar(255);uniqueIndex;not null"`
+	Username         string    `gorm:"type:varchar(255);not null"`
 	Password         string    `gorm:"type:varchar(255);not null"`
-	Role             string    `gorm:"type:varchar(255);not null"`
-	Provider         string    `gorm:"type:varchar(255);not null"`
-	Photo            string    `gorm:"type:varchar(255);default:'default.png'"`
-	VerificationCode string    `gorm:"type:varchar(255)"`
+	FullName         string    `gorm:"type:varchar(255);not null"`
+	Gender           string    `gorm:"type:enum('pria','wanita');not null"`
+	Address          string    `gorm:"type:text;not null"`
 	Verified         bool      `gorm:"not null"`
+	Photo            string    `gorm:"type:varchar(255);default:'default.png'"`
+	Role             string    `gorm:"type:varchar(255);not null"`
+	VerificationCode string    `gorm:"type:varchar(255)"`
 	CreatedAt        time.Time `gorm:"not null"`
 	UpdatedAt        time.Time `gorm:"not null"`
 }
 
 type SignUpInput struct {
-	Name            string                `form:"name" binding:"required"`
 	Email           string                `form:"email" binding:"required"`
-	Password        string                `form:"password" binding:"required,min=8"`
+	Username        string                `form:"username" binding:"required"`
+	Password        string                `form:"password" binding:"required,min=3"`
 	PasswordConfirm string                `form:"passwordConfirm" binding:"required"`
-	Photo           *multipart.FileHeader `form:"photo"`
+	FullName        string                `form:"fullname" binding:"required"`
+	Gender          string                `form:"gender" binding:"required"`
+	Photo           *multipart.FileHeader `form:"photo" binding:"required"`
+	Address         string                `form:"alamat" binding:"required"`
 }
 
 type SignInInput struct {

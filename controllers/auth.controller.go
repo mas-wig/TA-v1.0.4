@@ -22,23 +22,23 @@ func NewAuthController(DB *gorm.DB) AuthController {
 	return AuthController{DB}
 }
 
-// [...] SignUp User
+// Register
 func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	var payload *models.SignUpInput
 
 	if err := ctx.ShouldBind(&payload); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail 1", "message": err.Error()})
 		return
 	}
 
 	if payload.Password != payload.PasswordConfirm {
-		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Passwords do not match"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail 2", "message": "Passwords do not match"})
 		return
 	}
 
 	hashedPassword, err := utils.HashPassword(payload.Password)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": err.Error()})
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error 1", "message": err.Error()})
 		return
 	}
 
@@ -46,7 +46,7 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	if payload.Photo != nil {
 		url, err := utils.SaveUploadedFile(payload.Photo)
 		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
+			ctx.JSON(http.StatusInternalServerError, gin.H{"status": "error 2", "message": err.Error()})
 			return
 		}
 		photoURL = url
@@ -54,13 +54,15 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	now := time.Now()
 
 	newUser := models.User{
-		Name:      payload.Name,
 		Email:     strings.ToLower(payload.Email),
+		Username:  strings.ToLower(payload.Username),
 		Password:  hashedPassword,
-		Role:      "user",
+		FullName:  payload.FullName,
+		Gender:    payload.Gender,
+		Address:   payload.Address,
 		Verified:  false,
 		Photo:     photoURL,
-		Provider:  "local",
+		Role:      "user",
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
@@ -68,10 +70,10 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	result := ac.DB.Create(&newUser)
 
 	if result.Error != nil && strings.Contains(result.Error.Error(), "duplicate key value violates unique") {
-		ctx.JSON(http.StatusConflict, gin.H{"status": "fail", "message": "User with that email already exists"})
+		ctx.JSON(http.StatusConflict, gin.H{"status": "fail 3", "message": "User with that email already exists"})
 		return
 	} else if result.Error != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": "Something bad happened"})
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error 3", "message": "Something bad happened"})
 		return
 	}
 
@@ -86,7 +88,7 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	newUser.VerificationCode = verificationCode
 	ac.DB.Save(newUser)
 
-	var firstName = newUser.Name
+	var firstName = newUser.Username
 
 	if strings.Contains(firstName, " ") {
 		firstName = strings.Split(firstName, " ")[1]
@@ -141,13 +143,13 @@ func (ac *AuthController) SignInUser(ctx *gin.Context) {
 	ctx.Redirect(http.StatusFound, "/users/dashboard")
 }
 
-// [...] SignOut User
+// Logout
 func (ac *AuthController) LogoutUser(ctx *gin.Context) {
 	ctx.SetCookie("token", "", -1, "/", "localhost", false, true)
-	ctx.JSON(http.StatusOK, gin.H{"status": "success"})
+	ctx.Redirect(http.StatusFound, "/api/auth/login")
 }
 
-// [...] Verify Email
+// Verify Email
 func (ac *AuthController) VerifyEmail(ctx *gin.Context) {
 
 	code := ctx.Params.ByName("verificationCode")

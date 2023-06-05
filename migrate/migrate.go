@@ -9,9 +9,9 @@ import (
 )
 
 func init() {
-	config, err := initializers.LoadConfig("../")
+	config, err := initializers.LoadConfig("..")
 	if err != nil {
-		log.Fatal("🚀 Could not load environment variables", err)
+		log.Fatal("file .env tidak ditemukan", err)
 	}
 
 	initializers.ConnectDB(&config)
@@ -20,5 +20,5 @@ func init() {
 func main() {
 	initializers.DB.Exec("SELECT UUID()")
 	initializers.DB.AutoMigrate(&models.User{}, &models.Post{})
-	fmt.Println("👍 Migration complete")
+	fmt.Println("!! Migration complete")
 }
