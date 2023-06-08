@@ -19,6 +19,10 @@ func init() {
 
 func main() {
 	initializers.DB.Exec("SELECT UUID()")
-	initializers.DB.AutoMigrate(&models.User{}, &models.Post{})
+	initializers.DB.AutoMigrate(
+		&models.User{},
+		&models.Post{},
+		&models.Presensi{},
+	)
 	fmt.Println("!! Migration complete")
 }

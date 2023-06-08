@@ -50,3 +50,8 @@ type UserResponse struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
+
+type UserResponseProfile struct {
+	FullName  string
+	PhotoPath string
+}

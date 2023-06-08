@@ -32,10 +32,17 @@ func (uc *UserController) GetMe(ctx *gin.Context) {
 		CreatedAt: currentUser.CreatedAt,
 		UpdatedAt: currentUser.UpdatedAt,
 	}
-
 	ctx.JSON(http.StatusOK, gin.H{"status": "success", "data": gin.H{"user": userResponse}})
 }
 
 func (uc *UserController) UserDashboard(ctx *gin.Context) {
-	ctx.HTML(http.StatusOK, "index.html", gin.H{})
+	currentUser := ctx.MustGet("currentUser").(models.User)
+	userResponse := &models.UserResponseProfile{
+		FullName:  currentUser.FullName,
+		PhotoPath: currentUser.Photo,
+	}
+	ctx.HTML(http.StatusOK, "index.html", gin.H{
+		"Fullname":  userResponse.FullName,
+		"PhotoPath": userResponse.PhotoPath,
+	})
 }

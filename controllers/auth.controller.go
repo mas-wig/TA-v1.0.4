@@ -138,9 +138,16 @@ func (ac *AuthController) SignInUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return
 	}
-
-	ctx.SetCookie("access_token", token, config.TokenMaxAge*60, "/", "localhost", false, true)
-	ctx.Redirect(http.StatusFound, "/users/dashboard")
+	switch payload.Role {
+	case "user":
+		ctx.SetCookie("access_token", token, config.TokenMaxAge*60, "/", "localhost", false, true)
+		ctx.Redirect(http.StatusFound, "/users/dashboard")
+	case "admin":
+		ctx.SetCookie("access_token", token, config.TokenMaxAge*60, "/", "localhost", false, true)
+		ctx.Redirect(http.StatusFound, "/api/users/me")
+	default:
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "role tidak ada"})
+	}
 }
 
 // Logout

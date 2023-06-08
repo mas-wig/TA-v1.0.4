@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+
 	"github.com/mas-wig/ta-v1.0.4/controllers"
 	"github.com/mas-wig/ta-v1.0.4/initializers"
 	"github.com/mas-wig/ta-v1.0.4/routes"
@@ -20,6 +21,9 @@ var (
 
 	PostController      controllers.PostController
 	PostRouteController routes.PostRouteController
+
+	AbsensiController      controllers.AbsensiController
+	AbsensiRouteController routes.UserAbsensiController
 )
 
 func init() {
@@ -39,6 +43,9 @@ func init() {
 	PostController = controllers.NewPostController(initializers.DB)
 	PostRouteController = routes.NewRoutePostController(PostController)
 
+	AbsensiController = controllers.NewAbsensiController(initializers.DB)
+	AbsensiRouteController = routes.NewAbsensiContoller(AbsensiController)
+
 	server = gin.Default()
 }
 
@@ -56,6 +63,7 @@ func main() {
 
 	server.Static("/src/", "./public/src/")
 	server.Static("/vendors/", "./public/vendors/")
+	server.Static("/static/", "./public/static/")
 
 	server.LoadHTMLGlob("./public/templates/*.html")
 
@@ -63,6 +71,7 @@ func main() {
 	AuthRouteController.AuthRoute(api)
 	UserRouteController.UserRouteProfile(api)
 	PostRouteController.PostRoute(api)
+	AbsensiRouteController.UserPrensensi(api)
 
 	router := server.Group("/")
 	UserRouteController.UserRouteDashboard(router)

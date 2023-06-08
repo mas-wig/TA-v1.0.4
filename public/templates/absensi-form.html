@@ -42,6 +42,11 @@
       type="text/css"
       href="/vendors/styles/icon-font.min.css"
     />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/src/plugins/jquery-steps/jquery.steps.css"
+    />
     <link rel="stylesheet" type="text/css" href="/vendors/styles/style.css" />
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -93,28 +98,33 @@
               data-toggle="dropdown"
             >
               <span class="user-icon">
-                <img src="/vendors/images/photo1.jpg" alt="" />
+                <img src="{{.PhotoPath}}" alt="" />
               </span>
-              <span class="user-name">Ross C. Lopez</span>
+              <span class="user-name">{{.FullName}}</span>
             </a>
             <div
               class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list"
             >
               <a class="dropdown-item" href="profile.html"
-                ><i class="dw dw-user1"></i> Profile</a
+                ><i class="dw dw-user1"></i> profile</a
               >
               <a class="dropdown-item" href="/api/auth/signin"
-                ><i class="dw dw-logout"></i> Log Out</a
+                ><i class="dw dw-logout"></i> log out</a
               >
             </div>
           </div>
         </div>
       </div>
     </div>
+
     <div class="left-side-bar">
       <div class="brand-logo">
         <a href="/users/dashboard">
-          <img src="/vendors/images/deskapp-logo.svg" alt="" class="dark-logo" />
+          <img
+            src="/vendors/images/deskapp-logo.svg"
+            alt=""
+            class="dark-logo"
+          />
           <img
             src="/vendors/images/deskapp-logo-white.svg"
             alt=""
@@ -126,7 +136,8 @@
         </div>
       </div>
       <div class="menu-block customscroll">
-        <!-- SIDEBAR BEGIN -->
+        <!-- SETUP SIDEBAR -->
+
         <div class="sidebar-menu">
           <ul id="accordion-menu">
             <li>
@@ -141,7 +152,7 @@
                 ><span class="mtext">Input Data</span>
               </a>
               <ul class="submenu">
-                <li><a href="form-basic.html">Absensi</a></li>
+                <li><a href="/api/absen/">Absensi</a></li>
               </ul>
             </li>
             <li class="dropdown">
@@ -201,15 +212,15 @@
             <div class="row">
               <div class="col-md-6 col-sm-12">
                 <div class="title">
-                  <h4>Form</h4>
+                  <h4>Absensi</h4>
                 </div>
                 <nav aria-label="breadcrumb" role="navigation">
                   <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                      <a href="/users/dashboard">Home</a>
+                      <a href="index.html">Home</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                      Form Basic
+                      Absensi
                     </li>
                   </ol>
                 </nav>
@@ -217,59 +228,132 @@
             </div>
           </div>
 
-          <!-- horizontal Basic Forms Start -->
           <div class="pd-20 card-box mb-30">
             <div class="clearfix">
-              <div class="pull-left">
-                <h4 class="text-blue h4">horizontal Basic Forms</h4>
-                <p class="mb-30">All bootstrap element classies</p>
-              </div>
+              <h4 class="text-blue h4">Prensensi Siswa</h4>
+              <p class="mb-30"></p>
             </div>
-            <form>
-              <div class="form-group">
-                <label>Text</label>
-                <input
-                  class="form-control"
-                  type="text"
-                  placeholder="Johnny Brown"
-                />
-              </div>
-              <div class="form-group">
-                <label>Email</label>
-                <input
-                  class="form-control"
-                  value="bootstrap@example.com"
-                  type="email"
-                />
-              </div>
 
-              <div class="form-group">
-                <label>Example file input</label>
-                <input
-                  type="file"
-                  class="form-control-file form-control height-auto"
-                />
-              </div>
-            </form>
-            <div class="collapse collapse-box" id="horizontal-basic-form1">
-              <div class="code-box">
-                <div class="clearfix">
-                  <a
-                    href="javascript:;"
-                    class="btn btn-primary btn-sm code-copy pull-left"
-                    data-clipboard-target="#horizontal-basic"
-                    ><i class="fa fa-clipboard"></i> Copy Code</a
+            <div class="wizard-content">
+              <form
+                class="tab-wizard2 wizard-circle wizard"
+                method="post"
+                action="{{.Action}}"
+              >
+                <section>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Hari :</label>
+                        <select
+                          class="custom-select2 form-control"
+                          name="hari"
+                          style="width: 100%; height: 38px"
+                        >
+                          <option value="senin">Senin</option>
+                          <option value="selasa">Selasa</option>
+                          <option value="rabu">Rabu</option>
+                          <option value="kamis">Kamis</option>
+                          <option value="jumat">Jum'at</option>
+                          <option value="sabtu">Sabtu</option>
+                          <option value="minggu">Minggu</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Tanggal :</label>
+                        <input
+                          name="date"
+                          class="form-control date-picker"
+                          placeholder="Select Date"
+                          type="text"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Kehadiran :</label>
+                        <select
+                          class="custom-select2 form-control"
+                          name="kehadiran"
+                          style="width: 100%; height: 38px"
+                        >
+                          <option value="Hadir">Hadir</option>
+                          <option value="Tidak Hadir">Tidak Hadir</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Lokasi :</label>
+                        <select
+                          class="custom-select2 form-control"
+                          name="lokasi"
+                          style="width: 100%; height: 38px"
+                        >
+                          <option value="Lapangan Polsek Karangjahe">
+                            Lapangan Polsek Karangjahe
+                          </option>
+                          <option value="Lapangan SMP 1 Kragan">
+                            Lapangan SMP 1 Kragan
+                          </option>
+                          <option value="Lapangan Desa Serambit">
+                            Lapangan Desa Serambit
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Catatan Kesehatan</label>
+                        <textarea
+                          class="form-control"
+                          name="catatankesehatan"
+                        ></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <p class="mb-30"></p>
+                <button
+                  type="submit"
+                  id="success-modal-btn"
+                  class="btn btn-primary"
+                  data-toggle="modal"
+                  data-target="#success-modal"
+                  data-backdrop="static"
+                >
+                  Simpan
+                </button>
+                <div
+                  class="modal fade"
+                  id="success-modal"
+                  tabindex="-1"
+                  role="dialog"
+                  aria-labelledby="exampleModalCenterTitle"
+                  aria-hidden="true"
+                >
+                  <div
+                    class="modal-dialog modal-dialog-centered max-width-400"
+                    role="document"
                   >
-                  <a
-                    href="#horizontal-basic-form1"
-                    class="btn btn-primary btn-sm pull-right"
-                    rel="content-y"
-                    data-toggle="collapse"
-                    role="button"
-                    ><i class="fa fa-eye-slash"></i> Hide Code</a
-                  >
+                    <div class="modal-content">
+                      <div class="modal-body text-center font-18">
+                        <h3 class="mb-20">Form Submitted!</h3>
+                        <div class="mb-30 text-center">
+                          <img src="/vendors/images/success.png" />
+                        </div>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing
+                        elit, sed do eiusmod
+                      </div>
+                      <div class="modal-footer justify-content-center">
+                        <a href="login.html" class="btn btn-primary">Done</a>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>
@@ -281,6 +365,8 @@
     <script src="/vendors/scripts/script.min.js"></script>
     <script src="/vendors/scripts/process.js"></script>
     <script src="/vendors/scripts/layout-settings.js"></script>
+    <script src="/src/plugins/jquery-steps/jquery.steps.js"></script>
+    <script src="/vendors/scripts/steps-setting.js"></script>
     <!-- Google Tag Manager (noscript) -->
     <noscript
       ><iframe

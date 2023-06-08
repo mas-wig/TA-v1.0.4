@@ -104,9 +104,9 @@
               data-toggle="dropdown"
             >
               <span class="user-icon">
-                <img src="/vendors/images/photo1.jpg" alt="" />
+                <img src="{{.PhotoPath}}" alt="" />
               </span>
-              <span class="user-name">ross c. lopez</span>
+              <span class="user-name">{{.Fullname}}</span>
             </a>
             <div
               class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list"
@@ -159,7 +159,7 @@
                 ><span class="mtext">Input Data</span>
               </a>
               <ul class="submenu">
-                <li><a href="form-basic.html">Absensi</a></li>
+                <li><a href="/api/absen/">Absensi</a></li>
               </ul>
             </li>
             <li class="dropdown">

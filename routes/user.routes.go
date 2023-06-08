@@ -18,6 +18,7 @@ func (uc *UserRouteController) UserRouteProfile(rg *gin.RouterGroup) {
 	router := rg.Group("users")
 	router.GET("/me", middleware.DeserializeUser(), uc.userController.GetMe)
 }
+
 func (uc *UserRouteController) UserRouteDashboard(rg *gin.RouterGroup) {
 	router := rg.Group("users")
 	router.GET("/dashboard", middleware.DeserializeUser(), uc.userController.UserDashboard)
