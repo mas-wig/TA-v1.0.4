@@ -15,7 +15,6 @@ func NewRoutePostController(postController controllers.PostController) PostRoute
 }
 
 func (pc *PostRouteController) PostRoute(rg *gin.RouterGroup) {
-
 	router := rg.Group("posts")
 	router.Use(middleware.DeserializeUser())
 	router.POST("/create", pc.postController.CreatePost)

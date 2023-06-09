@@ -125,7 +125,11 @@
     <div class="left-side-bar">
       <div class="brand-logo">
         <a href="/users/dashboard">
-          <img src="/vendors/images/deskapp-logo.svg" alt="" class="dark-logo" />
+          <img
+            src="/vendors/images/deskapp-logo.svg"
+            alt=""
+            class="dark-logo"
+          />
           <img
             src="/vendors/images/deskapp-logo-white.svg"
             alt=""
@@ -162,7 +166,7 @@
                 ><span class="mtext">Enkripsi</span>
               </a>
               <ul class="submenu">
-                <li><a href="datatable.html">Absensi</a></li>
+                <li><a href="/api/absen/encode">Absensi</a></li>
               </ul>
             </li>
             <li class="dropdown">
@@ -171,7 +175,7 @@
                 ><span class="mtext">Dekripsi</span>
               </a>
               <ul class="submenu">
-                <li><a href="datatable.html">Absensi</a></li>
+                <li><a href="/api/absen/encode">Absensi</a></li>
               </ul>
             </li>
             <li>
@@ -236,21 +240,24 @@
               <table class="data-table table stripe hover nowrap">
                 <thead>
                   <tr>
-                    <th class="table-plus datatable-nosort">Name</th>
-                    <th>Age</th>
-                    <th>Office</th>
-                    <th>Address</th>
-                    <th>Start Date</th>
+                    <th class="table-plus datatable-nosort">Nama Siswa</th>
+                    <th>Hari</th>
+                    <th>Lokasi</th>
+                    <th>Tanggal</th>
+                    <th>kehadiran</th>
+                    <th>Informasi Medis</th>
                     <th class="datatable-nosort">Action</th>
                   </tr>
                 </thead>
                 <tbody>
+                  {{ range $index, $presensi := .Absensi}}
                   <tr>
-                    <td class="table-plus">Gloria F. Mead</td>
-                    <td>25</td>
-                    <td>Sagittarius</td>
-                    <td>2829 Trainer Avenue Peoria, IL 61602</td>
-                    <td>29-03-2018</td>
+                    <td class="table-plus">{{$presensi.NamaSiswa}}</td>
+                    <td>{{$presensi.Hari}}</td>
+                    <td>{{$presensi.Lokasi}}</td>
+                    <td>{{$presensi.TanggalWaktu}}</td>
+                    <td>{{$presensi.Kehadiran}}</td>
+                    <td>{{$presensi.InformasiMedis}}</td>
                     <td>
                       <div class="dropdown">
                         <a
@@ -267,9 +274,15 @@
                           <a class="dropdown-item" href="#"
                             ><i class="dw dw-eye"></i> View</a
                           >
-                          <a class="dropdown-item" href="#"
-                            ><i class="dw dw-edit2"></i> Edit</a
+                          <form
+                            method="post"
+                            action="/api/absen/decode/{{$presensi.ID}}"
                           >
+                            <button type="submit" class="dropdown-item">
+                              <i class="dw dw-edit2"> </i>
+                              Edit
+                            </button>
+                          </form>
                           <a class="dropdown-item" href="#"
                             ><i class="dw dw-delete-3"></i> Delete</a
                           >
@@ -277,6 +290,7 @@
                       </div>
                     </td>
                   </tr>
+                  {{ end }}
                 </tbody>
               </table>
             </div>

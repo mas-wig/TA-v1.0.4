@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/base64"
 	"net/http"
 	"strings"
 
@@ -49,7 +50,7 @@ func (abc *AbsensiController) CreateAbsensi(ctx *gin.Context) {
 	newAbsensi := models.Presensi{
 		NamaSiswa:      currentUser.FullName,
 		IDSiswa:        userID,
-		Hari:           payload.Hari,
+		Hari:           base64.StdEncoding.EncodeToString([]byte(payload.Hari)),
 		Lokasi:         payload.Lokasi,
 		TanggalWaktu:   payload.TanggalWaktu,
 		Kehadiran:      payload.Kehadiran,
@@ -66,6 +67,40 @@ func (abc *AbsensiController) CreateAbsensi(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{"status": "success", "data": newAbsensi})
+	ctx.Redirect(http.StatusFound, "/api/absen/encode")
 
+}
+
+func (abc *AbsensiController) GetAllAbsensi(ctx *gin.Context) {
+	var allPresensi []models.Presensi
+	results := abc.DB.Find(&allPresensi)
+
+	if results.Error != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": results.Error})
+		return
+	}
+
+	ctx.HTML(http.StatusOK, "encoded-absensi.html", gin.H{
+		"Absensi": allPresensi,
+	})
+}
+
+func (abc *AbsensiController) DecodeByID(ctx *gin.Context) {
+	absenID := ctx.Param("absenId")
+
+	var absensiSiswa models.Presensi
+	result := abc.DB.First(&absensiSiswa, "id = ?", absenID)
+	if result.Error != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": "No post with that title exists"})
+		return
+	}
+
+	hari, _ := base64.StdEncoding.DecodeString(absensiSiswa.Hari)
+
+	decodeData := models.Presensi{
+		Hari: string(hari),
+	}
+	abc.DB.Model(&absensiSiswa).Updates(decodeData)
+
+	ctx.Redirect(http.StatusFound, "/api/absen/encode")
 }

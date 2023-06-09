@@ -95,7 +95,6 @@ func (pc *PostController) UpdatePost(ctx *gin.Context) {
 
 func (pc *PostController) FindPostByID(ctx *gin.Context) {
 	postID := ctx.Param("postId")
-
 	var post models.Post
 	result := pc.DB.First(&post, "id = ?", postID)
 	if result.Error != nil {
