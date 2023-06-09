@@ -175,7 +175,7 @@
                 ><span class="mtext">Dekripsi</span>
               </a>
               <ul class="submenu">
-                <li><a href="/api/absen/encode">Absensi</a></li>
+                <li><a href="/api/absen/decode">Absensi</a></li>
               </ul>
             </li>
             <li>
@@ -260,29 +260,29 @@
                     <td>{{$presensi.InformasiMedis}}</td>
                     <td>
                       <div class="dropdown">
-                        <a
+                        <button
                           class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle"
-                          href="#"
-                          role="button"
                           data-toggle="dropdown"
+                          type="button"
                         >
                           <i class="dw dw-more"></i>
-                        </a>
+                        </button>
                         <div
                           class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list"
                         >
                           <a class="dropdown-item" href="#"
                             ><i class="dw dw-eye"></i> View</a
                           >
-                          <form
-                            method="post"
-                            action="/api/absen/decode/{{$presensi.ID}}"
-                          >
-                            <button type="submit" class="dropdown-item">
-                              <i class="dw dw-edit2"> </i>
-                              Edit
-                            </button>
-                          </form>
+
+                          <a
+                            class="dropdown-item"
+                            href="#"
+                            data-toggle="modal"
+                            data-target="#modal-decode"
+                            ><i class="dw dw-edit2"> </i>
+                            Decode
+                          </a>
+
                           <a class="dropdown-item" href="#"
                             ><i class="dw dw-delete-3"></i> Delete</a
                           >
@@ -290,6 +290,57 @@
                       </div>
                     </td>
                   </tr>
+                  <div
+                    class="modal fade"
+                    id="modal-decode"
+                    tabindex="-1"
+                    role="dialog"
+                    aria-labelledby="myLargeModalLabel"
+                    aria-hidden="true"
+                  >
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <div
+                          class="login-box bg-white box-shadow border-radius-10"
+                        >
+                          <div class="login-title">
+                            <h2 class="text-center text-primary">
+                              Decode Key Required
+                            </h2>
+                          </div>
+                          <form
+                            method="post"
+                            action="/api/absen/decode/{{$presensi.ID}}"
+                          >
+                            <div class="input-group custom">
+                              <input
+                                type="text"
+                                name="decodekey"
+                                class="form-control form-control-lg"
+                                placeholder="Masukan Key Dekripsi Anda"
+                              />
+                              <div class="input-group-append custom">
+                                <span class="input-group-text"
+                                  ><i class="bi bi-key"></i
+                                ></span>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-sm-12">
+                                <div class="input-group mb-0">
+                                  <input
+                                    class="btn btn-primary btn-lg btn-block"
+                                    type="submit"
+                                    value="Decode"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   {{ end }}
                 </tbody>
               </table>

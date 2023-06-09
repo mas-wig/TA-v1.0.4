@@ -22,7 +22,8 @@ func main() {
 	initializers.DB.AutoMigrate(
 		&models.User{},
 		&models.Post{},
-		&models.Presensi{},
+		&models.EncodePresensi{},
+		&models.DecodePresensi{},
 	)
 	fmt.Println("!! Migration complete")
 }

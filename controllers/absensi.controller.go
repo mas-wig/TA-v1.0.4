@@ -47,14 +47,14 @@ func (abc *AbsensiController) CreateAbsensi(ctx *gin.Context) {
 		return
 	}
 
-	newAbsensi := models.Presensi{
-		NamaSiswa:      currentUser.FullName,
+	newAbsensi := models.EncodePresensi{
+		NamaSiswa:      base64.StdEncoding.EncodeToString([]byte(currentUser.FullName)),
 		IDSiswa:        userID,
 		Hari:           base64.StdEncoding.EncodeToString([]byte(payload.Hari)),
-		Lokasi:         payload.Lokasi,
-		TanggalWaktu:   payload.TanggalWaktu,
-		Kehadiran:      payload.Kehadiran,
-		InformasiMedis: payload.InformasiMedis,
+		Lokasi:         base64.StdEncoding.EncodeToString([]byte(payload.Lokasi)),
+		TanggalWaktu:   base64.StdEncoding.EncodeToString([]byte(payload.TanggalWaktu)),
+		Kehadiran:      base64.StdEncoding.EncodeToString([]byte(payload.Kehadiran)),
+		InformasiMedis: base64.StdEncoding.EncodeToString([]byte(payload.InformasiMedis)),
 	}
 
 	result := abc.DB.Create(&newAbsensi)
@@ -71,8 +71,8 @@ func (abc *AbsensiController) CreateAbsensi(ctx *gin.Context) {
 
 }
 
-func (abc *AbsensiController) GetAllAbsensi(ctx *gin.Context) {
-	var allPresensi []models.Presensi
+func (abc *AbsensiController) GetAllEncodeAbsensi(ctx *gin.Context) {
+	var allPresensi []models.EncodePresensi
 	results := abc.DB.Find(&allPresensi)
 
 	if results.Error != nil {
@@ -84,23 +84,91 @@ func (abc *AbsensiController) GetAllAbsensi(ctx *gin.Context) {
 		"Absensi": allPresensi,
 	})
 }
+func (abc *AbsensiController) GetAllDecodeAbsensi(ctx *gin.Context) {
+	var allPresensi []models.DecodePresensi
+	results := abc.DB.Find(&allPresensi)
+
+	if results.Error != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": results.Error})
+		return
+	}
+
+	ctx.HTML(http.StatusOK, "decoded-absensi.html", gin.H{
+		"Absensi": allPresensi,
+	})
+}
 
 func (abc *AbsensiController) DecodeByID(ctx *gin.Context) {
 	absenID := ctx.Param("absenId")
 
-	var absensiSiswa models.Presensi
+	var payload *models.DecodeKey
+	if err := ctx.ShouldBind(&payload); err != nil {
+		ctx.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	currentUser := ctx.MustGet("currentUser").(models.User)
+	userID, err := uuid.Parse(currentUser.ID)
+	if err != nil {
+		panic("UUID kosong ")
+	}
+
+	var absensiSiswa models.EncodePresensi
 	result := abc.DB.First(&absensiSiswa, "id = ?", absenID)
 	if result.Error != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": "No post with that title exists"})
 		return
 	}
 
-	hari, _ := base64.StdEncoding.DecodeString(absensiSiswa.Hari)
-
-	decodeData := models.Presensi{
-		Hari: string(hari),
+	if payload.Key != absenID {
+		ctx.Redirect(http.StatusFound, "/api/absen/encode")
+		return
 	}
-	abc.DB.Model(&absensiSiswa).Updates(decodeData)
 
-	ctx.Redirect(http.StatusFound, "/api/absen/encode")
+	fullname, _ := base64.StdEncoding.DecodeString(absensiSiswa.NamaSiswa)
+	hari, _ := base64.StdEncoding.DecodeString(absensiSiswa.Hari)
+	lokasi, _ := base64.StdEncoding.DecodeString(absensiSiswa.Lokasi)
+	date, _ := base64.StdEncoding.DecodeString(absensiSiswa.TanggalWaktu)
+	kehadiran, _ := base64.StdEncoding.DecodeString(absensiSiswa.Kehadiran)
+	catatanMedis, _ := base64.StdEncoding.DecodeString(absensiSiswa.InformasiMedis)
+
+	decodeData := models.DecodePresensi{
+		NamaSiswa:      string(fullname),
+		IDSiswa:        userID,
+		Hari:           string(hari),
+		Lokasi:         string(lokasi),
+		TanggalWaktu:   string(date),
+		Kehadiran:      string(kehadiran),
+		InformasiMedis: string(catatanMedis),
+	}
+
+	result = abc.DB.Create(&decodeData)
+	if result.Error != nil {
+		if strings.Contains(result.Error.Error(), "duplicate key") {
+			ctx.JSON(http.StatusConflict, gin.H{"status": "fail", "message": "Post with that title already exists"})
+			return
+		}
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": result.Error.Error()})
+		return
+	}
+
+	abc.DB.Delete(&models.EncodePresensi{}, "id = ?", absenID)
+
+	ctx.Redirect(http.StatusFound, "/api/absen/decode")
+
+}
+func (abc *AbsensiController) DeleteByID(ctx *gin.Context) {
+	deleteID := ctx.Param("deleteId")
+	var absensiSiswa models.DecodePresensi
+	result := abc.DB.First(&absensiSiswa, "id = ?", deleteID)
+	if result.Error != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": "No post with that title exists"})
+		return
+	}
+	result = abc.DB.Delete(&absensiSiswa, "id = ?", deleteID)
+	if result.Error != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": "No post with that title exists"})
+		return
+	}
+	ctx.Redirect(http.StatusFound, "/api/absen/decode")
 }
