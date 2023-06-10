@@ -18,7 +18,7 @@ func (abc *UserAbsensiController) UserPrensensi(rg *gin.RouterGroup) {
 	router := rg.Group("absen")
 	router.Use(middleware.DeserializeUser())
 	router.POST("/create", abc.absensiController.CreateAbsensi)
-	router.GET("/", abc.absensiController.GetInputPresensi)
+	router.GET("/form", abc.absensiController.GetInputPresensi)
 	router.GET("/encode", abc.absensiController.GetAllEncodeAbsensi)
 	router.GET("/decode", abc.absensiController.GetAllDecodeAbsensi)
 	router.POST("/decode/:absenId", abc.absensiController.DecodeByID)
