@@ -105,7 +105,7 @@
             <div
               class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list"
             >
-              <a class="dropdown-item" href="profile.html"
+              <a class="dropdown-item" href="/api/users/me"
                 ><i class="dw dw-user1"></i> profile</a
               >
               <a class="dropdown-item" href="/api/auth/signin"
@@ -329,17 +329,20 @@
                                 <h4 class="text-blue h5 mb-20">
                                   Edit Your Personal Setting
                                 </h4>
+
                                 <div class="form-group">
-                                  <label>Full Name</label>
+                                  <label>Nama Lengkap</label>
                                   <input
                                     class="form-control form-control-lg"
+                                    value="{{.Profile.Name}}"
                                     type="text"
                                   />
                                 </div>
                                 <div class="form-group">
-                                  <label>Title</label>
+                                  <label>Decode Key</label>
                                   <input
                                     class="form-control form-control-lg"
+                                    value="{{.Profile.ID}}"
                                     type="text"
                                   />
                                 </div>
@@ -347,44 +350,34 @@
                                   <label>Email</label>
                                   <input
                                     class="form-control form-control-lg"
-                                    type="email"
+                                    type="text"
+                                    value="{{.Profile.Email}}"
                                   />
                                 </div>
                                 <div class="form-group">
-                                  <label>Date of birth</label>
+                                  <label>Role</label>
                                   <input
-                                    class="form-control form-control-lg date-picker"
+                                    class="form-control form-control-lg"
                                     type="text"
+                                    value="{{.Profile.Role}}"
                                   />
                                 </div>
 
-                                <div class="form-group">
-                                  <label>Phone Number</label>
-                                  <input
-                                    class="form-control form-control-lg"
-                                    type="text"
-                                  />
-                                </div>
-                                <div class="form-group">
-                                  <label>Vine URL:</label>
-                                  <input
-                                    class="form-control form-control-lg"
-                                    type="text"
-                                    placeholder="Paste your link here"
-                                  />
-                                </div>
                                 <div class="form-group">
                                   <label>Address</label>
-                                  <textarea class="form-control"></textarea>
-                                </div>
-
-                                <div class="form-group mb-0">
                                   <input
-                                    type="submit"
-                                    class="btn btn-primary"
-                                    value="Update Information"
+                                    class="form-control"
+                                    value="{{.Profile.Address}}"
                                   />
                                 </div>
+
+                                <!-- <div class="form-group mb-0"> -->
+                                <!--   <input -->
+                                <!--     type="submit" -->
+                                <!--     class="btn btn-primary" -->
+                                <!--     value="Update Information" -->
+                                <!--   /> -->
+                                <!-- </div> -->
                               </li>
                             </ul>
                           </form>

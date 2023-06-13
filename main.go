@@ -66,7 +66,6 @@ func main() {
 	server.Static("/static/", "./public/static/")
 
 	server.LoadHTMLGlob("./public/templates/*.html")
-
 	api := server.Group("/api")
 	AuthRouteController.AuthRoute(api)
 	UserRouteController.UserRouteProfile(api)

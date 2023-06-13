@@ -53,6 +53,14 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	}
 	now := time.Now()
 
+	var adminCount int64
+	ac.DB.Model(&models.User{}).Where("role = ?", "admin").Count(&adminCount)
+
+	var roleUser = "admin"
+	if adminCount <= 2 {
+		roleUser = "user"
+	}
+
 	newUser := models.User{
 		Email:     strings.ToLower(payload.Email),
 		Username:  strings.ToLower(payload.Username),
@@ -62,7 +70,7 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 		Address:   payload.Address,
 		Verified:  false,
 		Photo:     photoURL,
-		Role:      "user",
+		Role:      roleUser,
 		CreatedAt: now,
 		UpdatedAt: now,
 	}

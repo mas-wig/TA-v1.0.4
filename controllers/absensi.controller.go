@@ -26,6 +26,7 @@ func (abc *AbsensiController) GetInputPresensi(ctx *gin.Context) {
 		FullName:  currentUser.FullName,
 		PhotoPath: currentUser.Photo,
 	}
+
 	ctx.HTML(http.StatusOK, "absensi-form.html", gin.H{
 		"Action":    "/api/absen/create",
 		"Fullname":  userResponse.FullName,
@@ -84,6 +85,7 @@ func (abc *AbsensiController) GetAllEncodeAbsensi(ctx *gin.Context) {
 		"Absensi": allPresensi,
 	})
 }
+
 func (abc *AbsensiController) GetAllDecodeAbsensi(ctx *gin.Context) {
 	var allPresensi []models.DecodePresensi
 	results := abc.DB.Find(&allPresensi)
@@ -120,7 +122,7 @@ func (abc *AbsensiController) DecodeByID(ctx *gin.Context) {
 		return
 	}
 
-	if payload.Key != absenID {
+	if payload.Key != currentUser.ID {
 		ctx.Redirect(http.StatusFound, "/api/absen/encode")
 		return
 	}
@@ -157,6 +159,7 @@ func (abc *AbsensiController) DecodeByID(ctx *gin.Context) {
 	ctx.Redirect(http.StatusFound, "/api/absen/decode")
 
 }
+
 func (abc *AbsensiController) DeleteByID(ctx *gin.Context) {
 	deleteID := ctx.Param("deleteId")
 	var absensiSiswa models.DecodePresensi
@@ -171,4 +174,18 @@ func (abc *AbsensiController) DeleteByID(ctx *gin.Context) {
 		return
 	}
 	ctx.Redirect(http.StatusFound, "/api/absen/decode")
+}
+
+func (abc *AbsensiController) UpdateByID(ctx *gin.Context) {
+	updateID := ctx.Param("updateId")
+
+	var absensiSiswa models.DecodePresensi
+	result := abc.DB.First(&absensiSiswa, "id = ?", updateID)
+	if result.Error != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": "No post with that title exists"})
+		return
+	}
+
+	// TODO: Implementasi UpdateByID dan jangan lupa buat struct modelya
+
 }
