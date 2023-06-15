@@ -24,6 +24,9 @@ var (
 
 	AbsensiController      controllers.AbsensiController
 	AbsensiRouteController routes.UserAbsensiController
+
+	AdminController      controllers.AdminController
+	AdminRouteController routes.AdminRouteController
 )
 
 func init() {
@@ -46,6 +49,9 @@ func init() {
 	AbsensiController = controllers.NewAbsensiController(initializers.DB)
 	AbsensiRouteController = routes.NewAbsensiContoller(AbsensiController)
 
+	AdminController = controllers.NewAdminController(initializers.DB)
+	AdminRouteController = routes.NewRouteAdminController(AdminController)
+
 	server = gin.Default()
 }
 
@@ -66,6 +72,7 @@ func main() {
 	server.Static("/static/", "./public/static/")
 
 	server.LoadHTMLGlob("./public/templates/*.html")
+
 	api := server.Group("/api")
 	AuthRouteController.AuthRoute(api)
 	UserRouteController.UserRouteProfile(api)
@@ -74,5 +81,7 @@ func main() {
 
 	router := server.Group("/")
 	UserRouteController.UserRouteDashboard(router)
+	AdminRouteController.AdminRoutes(router)
+
 	log.Fatal(server.Run(":" + config.ServerPort))
 }

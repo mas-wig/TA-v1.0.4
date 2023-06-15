@@ -23,4 +23,5 @@ func (abc *UserAbsensiController) UserPrensensi(rg *gin.RouterGroup) {
 	router.GET("/decode", abc.absensiController.GetAllDecodeAbsensi)
 	router.POST("/decode/:absenId", abc.absensiController.DecodeByID)
 	router.POST("/delete/:deleteId", abc.absensiController.DeleteByID)
+	router.POST("/update/:updateId", abc.absensiController.UpdatePresensiByID)
 }

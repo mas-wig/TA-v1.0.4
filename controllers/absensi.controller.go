@@ -176,16 +176,37 @@ func (abc *AbsensiController) DeleteByID(ctx *gin.Context) {
 	ctx.Redirect(http.StatusFound, "/api/absen/decode")
 }
 
-func (abc *AbsensiController) UpdateByID(ctx *gin.Context) {
+func (abc *AbsensiController) UpdatePresensiByID(ctx *gin.Context) {
 	updateID := ctx.Param("updateId")
+	currentUser := ctx.MustGet("currentUser").(models.User)
 
-	var absensiSiswa models.DecodePresensi
-	result := abc.DB.First(&absensiSiswa, "id = ?", updateID)
+	var payload *models.CreatePresensi
+	if err := ctx.ShouldBind(&payload); err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	var newUpdatePresensi models.DecodePresensi
+	result := abc.DB.First(&newUpdatePresensi, "id = ?", updateID)
 	if result.Error != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": "No post with that title exists"})
 		return
 	}
 
-	// TODO: Implementasi UpdateByID dan jangan lupa buat struct modelya
+	userID, err := uuid.Parse(currentUser.ID)
+	if err != nil {
+		panic("UUID kosong ")
+	}
 
+	updateDecodeData := models.DecodePresensi{
+		NamaSiswa:      newUpdatePresensi.NamaSiswa,
+		IDSiswa:        userID,
+		Hari:           payload.Hari,
+		Lokasi:         payload.Lokasi,
+		TanggalWaktu:   payload.TanggalWaktu,
+		Kehadiran:      payload.Kehadiran,
+		InformasiMedis: payload.InformasiMedis,
+	}
+	abc.DB.Model(&newUpdatePresensi).Updates(updateDecodeData)
+	ctx.Redirect(http.StatusFound, "/api/absen/decode")
 }

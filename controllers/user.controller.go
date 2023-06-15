@@ -17,7 +17,7 @@ func NewUserController(DB *gorm.DB) UserController {
 	return UserController{DB}
 }
 
-func (uc *UserController) GetMe(ctx *gin.Context) {
+func (uc *UserController) GetProfile(ctx *gin.Context) {
 	currentUser := ctx.MustGet("currentUser").(models.User)
 	userID, err := uuid.Parse(currentUser.ID)
 	if err != nil {

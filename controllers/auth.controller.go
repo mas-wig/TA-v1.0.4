@@ -152,7 +152,7 @@ func (ac *AuthController) SignInUser(ctx *gin.Context) {
 		ctx.Redirect(http.StatusFound, "/users/dashboard")
 	case "admin":
 		ctx.SetCookie("access_token", token, config.TokenMaxAge*60, "/", "localhost", false, true)
-		ctx.Redirect(http.StatusFound, "/api/users/me")
+		ctx.Redirect(http.StatusFound, "/admin/dashboard")
 	default:
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "role tidak ada"})
 	}
