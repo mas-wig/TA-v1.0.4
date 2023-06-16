@@ -24,6 +24,7 @@ func main() {
 		&models.Post{},
 		&models.EncodePresensi{},
 		&models.DecodePresensi{},
+		&models.EncodeProgressLatihan{},
 	)
 	fmt.Println("!! Migration complete")
 }

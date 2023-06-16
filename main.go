@@ -27,6 +27,9 @@ var (
 
 	AdminController      controllers.AdminController
 	AdminRouteController routes.AdminRouteController
+
+	ProgressController      controllers.ProgressController
+	ProgressRouteController routes.ProgressRouteController
 )
 
 func init() {
@@ -51,6 +54,9 @@ func init() {
 
 	AdminController = controllers.NewAdminController(initializers.DB)
 	AdminRouteController = routes.NewRouteAdminController(AdminController)
+
+	ProgressController = controllers.NewProgressController(initializers.DB)
+	ProgressRouteController = routes.NewRouteProgressController(ProgressController)
 
 	server = gin.Default()
 }
@@ -82,6 +88,7 @@ func main() {
 	router := server.Group("/")
 	UserRouteController.UserRouteDashboard(router)
 	AdminRouteController.AdminRoutes(router)
+	ProgressRouteController.ProgressRoutes(router)
 
 	log.Fatal(server.Run(":" + config.ServerPort))
 }
