@@ -19,6 +19,7 @@ type User struct {
 	Photo            string    `gorm:"type:varchar(255);default:'default.png'"`
 	Role             string    `gorm:"type:varchar(255);not null"`
 	VerificationCode string    `gorm:"type:varchar(255)"`
+	Acc              bool      `gorm:"not null"`
 	CreatedAt        time.Time `gorm:"not null"`
 	UpdatedAt        time.Time `gorm:"not null"`
 }
@@ -32,6 +33,7 @@ type SignUpInput struct {
 	Gender          string                `form:"gender" binding:"required"`
 	Photo           *multipart.FileHeader `form:"photo" binding:"required"`
 	Address         string                `form:"alamat" binding:"required"`
+	Acc             bool
 }
 
 type SignInInput struct {
@@ -47,6 +49,7 @@ type UserResponse struct {
 	Role    string    `json:"role,omitempty"`
 	Photo   string    `json:"photo,omitempty"`
 	Address string
+	Acc     bool
 }
 
 type UserResponseProfile struct {

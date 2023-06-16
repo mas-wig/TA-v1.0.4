@@ -24,6 +24,10 @@ func (uc *UserController) GetProfile(ctx *gin.Context) {
 		panic("UUID kosong ")
 	}
 
+	if !currentUser.Acc {
+		userID = uuid.Nil
+	}
+
 	userResponse := &models.UserResponse{
 		ID:      userID,
 		Name:    currentUser.FullName,
@@ -31,7 +35,9 @@ func (uc *UserController) GetProfile(ctx *gin.Context) {
 		Photo:   currentUser.Photo,
 		Role:    currentUser.Role,
 		Address: currentUser.Address,
+		Acc:     currentUser.Acc,
 	}
+
 	ctx.HTML(http.StatusOK, "profile.html", gin.H{"Profile": userResponse})
 }
 

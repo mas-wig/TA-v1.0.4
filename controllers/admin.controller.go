@@ -43,3 +43,45 @@ func (ac *AdminController) GetAllNewUser(ctx *gin.Context) {
 		"BelumVerifikasi": unverifiedCount,
 	})
 }
+
+func (ac *AdminController) GetAllUserACC(ctx *gin.Context) {
+	var allUsers []models.User
+	results := ac.DB.Where("role=? AND acc=?", "user", false).Find(&allUsers)
+
+	if results.Error != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": results.Error})
+		return
+	}
+
+	ctx.HTML(http.StatusOK, "user-acc.html", gin.H{
+		"Users": allUsers,
+	})
+}
+func (ac *AdminController) GetAllUserList(ctx *gin.Context) {
+	var allUsers []models.User
+	results := ac.DB.Where("role=? AND acc=?", "user", true).Find(&allUsers)
+
+	if results.Error != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": results.Error})
+		return
+	}
+
+	ctx.HTML(http.StatusOK, "user-acc.html", gin.H{
+		"Users": allUsers,
+	})
+}
+
+func (ac *AdminController) GetUserDecodeKey(ctx *gin.Context) {
+	updateID := ctx.Param("updateId")
+
+	var newUpdateUser models.User
+	result := ac.DB.First(&newUpdateUser, "id = ?", updateID)
+	if result.Error != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": "No post with that title exists"})
+		return
+	}
+
+	ac.DB.Model(&newUpdateUser).Where("id =?", updateID).Update("acc", true)
+
+	ctx.Redirect(http.StatusFound, "/admin/access")
+}

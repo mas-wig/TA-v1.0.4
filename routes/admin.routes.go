@@ -17,4 +17,7 @@ func NewRouteAdminController(adminController controllers.AdminController) AdminR
 func (uc *AdminRouteController) AdminRoutes(rg *gin.RouterGroup) {
 	router := rg.Group("admin")
 	router.GET("/dashboard", middleware.DeserializeUser(), uc.userController.GetAllNewUser)
+	router.GET("/access", middleware.DeserializeUser(), uc.userController.GetAllUserACC)
+	router.GET("/list", middleware.DeserializeUser(), uc.userController.GetAllUserList)
+	router.POST("/keyaccess/:updateId", middleware.DeserializeUser(), uc.userController.GetUserDecodeKey)
 }

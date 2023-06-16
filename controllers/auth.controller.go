@@ -57,7 +57,7 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	ac.DB.Model(&models.User{}).Where("role = ?", "admin").Count(&adminCount)
 
 	var roleUser = "admin"
-	if adminCount <= 2 {
+	if adminCount >= 1 {
 		roleUser = "user"
 	}
 
@@ -71,6 +71,7 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 		Verified:  false,
 		Photo:     photoURL,
 		Role:      roleUser,
+		Acc:       false,
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
