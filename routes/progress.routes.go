@@ -19,4 +19,8 @@ func (uc *ProgressRouteController) ProgressRoutes(rg *gin.RouterGroup) {
 	router.POST("/create", middleware.DeserializeUser(), uc.progressController.CreateNewProgress)
 	router.GET("/form", middleware.DeserializeUser(), uc.progressController.FormProgress)
 	router.GET("/encode", middleware.DeserializeUser(), uc.progressController.GetAllEncodeProgress)
+	router.POST("/decode/:progressid", middleware.DeserializeUser(), uc.progressController.DecodeProgressByID)
+	router.POST("/update/:updateid", middleware.DeserializeUser(), uc.progressController.UpdateProgressByID)
+	router.POST("/delete/:deleteid", middleware.DeserializeUser(), uc.progressController.DeleteProgressByID)
+	router.GET("/decode", middleware.DeserializeUser(), uc.progressController.GetAllDecodeProgressData)
 }

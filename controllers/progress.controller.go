@@ -23,8 +23,16 @@ func NewProgressController(DB *gorm.DB) ProgressController {
 }
 
 func (pc *ProgressController) FormProgress(ctx *gin.Context) {
+	currentUser := ctx.MustGet("currentUser").(models.User)
+	userResponse := &models.UserResponseProfile{
+		FullName:  currentUser.FullName,
+		PhotoPath: currentUser.Photo,
+	}
+
 	ctx.HTML(http.StatusOK, "progress-form.html", gin.H{
-		"Action": "/progress/create",
+		"Action":    "/progress/create",
+		"Fullname":  userResponse.FullName,
+		"PhotoPath": userResponse.PhotoPath,
 	})
 }
 
@@ -76,12 +84,17 @@ func (pc *ProgressController) CreateNewProgress(ctx *gin.Context) {
 		return
 	}
 
-	ctx.Redirect(http.StatusOK, "/progress/encode")
+	ctx.Redirect(http.StatusFound, "/progress/encode")
 }
 
 func (pc *ProgressController) GetAllEncodeProgress(ctx *gin.Context) {
 	var allProgress []models.EncodeProgressLatihan
+	currentUser := ctx.MustGet("currentUser").(models.User)
 	results := pc.DB.Find(&allProgress)
+	userResponse := &models.UserResponseProfile{
+		FullName:  currentUser.FullName,
+		PhotoPath: currentUser.Photo,
+	}
 
 	if results.Error != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": results.Error})
@@ -89,6 +102,150 @@ func (pc *ProgressController) GetAllEncodeProgress(ctx *gin.Context) {
 	}
 
 	ctx.HTML(http.StatusOK, "encoded-progress.html", gin.H{
-		"Progress": allProgress,
+		"Fullname":  userResponse.FullName,
+		"Progress":  allProgress,
+		"PhotoPath": userResponse.PhotoPath,
 	})
+}
+
+func (pc *ProgressController) DecodeProgressByID(ctx *gin.Context) {
+	progressID := ctx.Param("progressid")
+
+	var payload *models.DecodeKey
+	if err := ctx.ShouldBind(&payload); err != nil {
+		ctx.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	currentUser := ctx.MustGet("currentUser").(models.User)
+	userID, err := uuid.Parse(currentUser.ID)
+	if err != nil {
+		panic("UUID kosong ")
+	}
+
+	var progressSiswa models.EncodeProgressLatihan
+	result := pc.DB.First(&progressSiswa, "id = ?", progressID)
+	if result.Error != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": "No post with that title exists"})
+		return
+	}
+
+	if payload.Key != currentUser.ID {
+		ctx.Redirect(http.StatusFound, "/progress/encode")
+		return
+	}
+
+	tingkatKemajuan, _ := base64.StdEncoding.DecodeString(progressSiswa.TingkatKemajuan)
+	catatanPerkembangan, _ := base64.StdEncoding.DecodeString(progressSiswa.CatatanPerkembangan)
+	penilaianTeknik, _ := base64.StdEncoding.DecodeString(progressSiswa.PenilaianTeknik)
+	penilaianDisiplin, _ := base64.StdEncoding.DecodeString(progressSiswa.PenilaianDisiplin)
+	catatanEvaluasi, _ := base64.StdEncoding.DecodeString(progressSiswa.CatatanEvaluasi)
+
+	decodeData := models.DecodeProgressLatihan{
+		SiswaID:             userID,
+		TingkatKemajuan:     string(tingkatKemajuan),
+		CatatanPerkembangan: string(catatanPerkembangan),
+		PenilaianTeknik:     string(penilaianTeknik),
+		PenilaianDisiplin:   string(penilaianDisiplin),
+		CatatanEvaluasi:     string(catatanEvaluasi),
+		Media:               progressSiswa.Media,
+	}
+
+	result = pc.DB.Create(&decodeData)
+	if result.Error != nil {
+		if strings.Contains(result.Error.Error(), "duplicate key") {
+			ctx.JSON(http.StatusConflict, gin.H{"status": "fail", "message": "Post with that title already exists"})
+			return
+		}
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": result.Error.Error()})
+		return
+	}
+
+	pc.DB.Delete(&models.EncodePresensi{}, "id = ?", progressID)
+	ctx.Redirect(http.StatusFound, "/progress/decode")
+
+}
+func (pc *ProgressController) GetAllDecodeProgressData(ctx *gin.Context) {
+	var allProgress []models.DecodeProgressLatihan
+	results := pc.DB.Find(&allProgress)
+
+	currentUser := ctx.MustGet("currentUser").(models.User)
+	userResponse := &models.UserResponseProfile{
+		FullName:  currentUser.FullName,
+		PhotoPath: currentUser.Photo,
+	}
+
+	if results.Error != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": results.Error})
+		return
+	}
+
+	ctx.HTML(http.StatusOK, "decoded-progress.html", gin.H{
+		"Progress":  allProgress,
+		"Fullname":  userResponse.FullName,
+		"PhotoPath": userResponse.PhotoPath,
+	})
+}
+
+func (pc *ProgressController) DeleteProgressByID(ctx *gin.Context) {
+	deleteID := ctx.Param("deleteid")
+	var progressSiswa models.DecodeProgressLatihan
+	result := pc.DB.First(&progressSiswa, "id = ?", deleteID)
+	if result.Error != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": "No post with that title exists"})
+		return
+	}
+	result = pc.DB.Delete(&progressSiswa, "id = ?", deleteID)
+	if result.Error != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": "No post with that title exists"})
+		return
+	}
+	ctx.Redirect(http.StatusFound, "/progress/decode")
+}
+
+func (pc *ProgressController) UpdateProgressByID(ctx *gin.Context) {
+	updateID := ctx.Param("updateid")
+	var payload *models.CreateProgress
+	if err := ctx.ShouldBind(&payload); err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	currentUser := ctx.MustGet("currentUser").(models.User)
+	userID, err := uuid.Parse(currentUser.ID)
+	if err != nil {
+		panic("UUID kosong ")
+	}
+
+	var newUpdateProgress models.DecodeProgressLatihan
+	result := pc.DB.First(&newUpdateProgress, "id = ?", updateID)
+	if result.Error != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": "No post with that title exists"})
+		return
+	}
+
+	var mediaURL string
+	if payload.Media != nil {
+		url, err := utils.SaveUploadedFile(payload.Media)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"status": "error 2", "message": err.Error()})
+			return
+		}
+		mediaURL = url
+	}
+
+	now := time.Now()
+	updateDecodeData := models.DecodeProgressLatihan{
+		SiswaID:             userID,
+		TingkatKemajuan:     payload.TingkatKemajuan,
+		CatatanPerkembangan: payload.CatatanPerkembangan,
+		PenilaianTeknik:     payload.PenilaianTeknik,
+		PenilaianDisiplin:   payload.PenilaianDisiplin,
+		CatatanEvaluasi:     payload.CatatanEvaluasi,
+		Media:               mediaURL,
+		CreatedAt:           now,
+		UpdatedAt:           now,
+	}
+	pc.DB.Model(&newUpdateProgress).Updates(updateDecodeData)
+	ctx.Redirect(http.StatusFound, "/progress/decode")
 }

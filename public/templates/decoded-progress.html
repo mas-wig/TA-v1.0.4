@@ -177,8 +177,8 @@
                 ><span class="mtext">Dekripsi</span>
               </a>
               <ul class="submenu">
-                <li><a href="/api/absen/decode">Absensi</a></li>
-                <li><a href="/progress/decode">Progress Siswa</a></li>
+                <li><a href="/api/absen/encode">Absensi</a></li>
+                <li><a href="/progress/encode">Progress Siswa</a></li>
               </ul>
             </li>
             <li>
@@ -265,83 +265,231 @@
                     <td>{{$data.Media}}</td>
                     <td>
                       <div class="dropdown">
-                        <button
+                        <a
                           class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle"
+                          href="#"
+                          role="button"
                           data-toggle="dropdown"
-                          type="button"
                         >
                           <i class="dw dw-more"></i>
-                        </button>
+                        </a>
                         <div
                           class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list"
                         >
-                          <a class="dropdown-item" href="#"
-                            ><i class="dw dw-eye"></i> View</a
-                          >
-
                           <a
                             class="dropdown-item"
                             href="#"
                             data-toggle="modal"
-                            data-target="#modal-decode"
+                            data-target="#modal-update-absen"
                             ><i class="dw dw-edit2"> </i>
-                            Decode
+                            Update
                           </a>
 
                           <a class="dropdown-item" href="#"
-                            ><i class="dw dw-delete-3"></i> Delete</a
+                            ><i class="dw dw-eye"></i> View</a
+                          >
+                          <a
+                            class="dropdown-item"
+                            href="#"
+                            data-toggle="modal"
+                            data-target="#modal-hapus"
+                            ><i class="dw dw-delete-3"></i>Hapus</a
                           >
                         </div>
                       </div>
                     </td>
                   </tr>
+
+                  <!-- Modal Hapus -->
                   <div
                     class="modal fade"
-                    id="modal-decode"
+                    id="modal-hapus"
                     tabindex="-1"
                     role="dialog"
                     aria-labelledby="myLargeModalLabel"
                     aria-hidden="true"
                   >
-                    <div class="modal-dialog modal-dialog-centered">
-                      <div class="modal-content">
-                        <div
-                          class="login-box bg-white box-shadow border-radius-10"
+                    <div class="modal-dialog modal-sm modal-dialog-centered">
+                      <div class="modal-content bg-danger text-white">
+                        <form
+                          method="post"
+                          action="/progress/delete/{{$data.ID}}"
                         >
-                          <div class="login-title">
-                            <h2 class="text-center text-primary">
-                              Decode Key Required
-                            </h2>
+                          <div class="modal-body text-center">
+                            <h3 class="text-white mb-15">
+                              <i class="fa fa-exclamation-triangle"></i> Alert
+                            </h3>
+                            <p>
+                              Apakah anda yakin ingin menghapus permanen data
+                              progress anda!
+                            </p>
+                            <input type="submit" value ="Ok" class="btn
+                            btn-light" / >
                           </div>
-                          <form
-                            method="post"
-                            action="/progress/decode/{{$data.ID}}"
-                          >
-                            <div class="input-group custom">
-                              <input
-                                type="text"
-                                name="decodekey"
-                                class="form-control form-control-lg"
-                                placeholder="Masukan Key Dekripsi Anda"
-                              />
-                              <div class="input-group-append custom">
-                                <span class="input-group-text"
-                                  ><i class="bi bi-key"></i
-                                ></span>
-                              </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Modal Update -->
+                  <div
+                    class="modal fade"
+                    id="modal-update-absen"
+                    tabindex="-1"
+                    role="dialog"
+                    aria-labelledby="myLargeModalLabel"
+                    aria-hidden="true"
+                  >
+                    <div class="modal-dialog modal-dialog-centered w-50 mw-100">
+                      <div class="modal-content container">
+                        <div class="modal-body">
+                          <div class="bg-white box-shadow border-radius-10">
+                            <div class="login-title">
+                              <h3 class="text-center text-primary">
+                                Update Data Absensi
+                                <p></p>
+                              </h3>
                             </div>
-                            <div class="row">
-                              <div class="col-sm-12">
-                                <div class="input-group mb-0">
-                                  <input
-                                    class="btn btn-primary btn-lg btn-block"
-                                    type="submit"
-                                    value="Decode"
-                                  />
+                            <form
+                              class="tab-wizard2 wizard-circle wizard"
+                              enctype="multipart/form-data"
+                              method="post"
+                              action="/progress/update/{{$data.ID}}"
+                            >
+                              <section>
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label>Tingkat Kemajuan :</label>
+                                      <select
+                                        class="custom-select2 form-control"
+                                        name="tingkatkemajuan"
+                                        style="width: 100%; height: 38px"
+                                      >
+                                        <option value="Tingkat Dasar">
+                                          Tingkat Dasar
+                                        </option>
+                                        <option value="Tingkat Menengah">
+                                          Tingkat Menengah
+                                        </option>
+                                        <option value="Tingkat Mahir">
+                                          Tingkat Mahir
+                                        </option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label>Catatan Perkembangan :</label>
+                                      <input
+                                        name="progressnote"
+                                        placeholder="Perkembangan Saat Ini"
+                                        type="text"
+                                        class="form-control"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label>Nilai Teknik :</label>
+                                      <select
+                                        class="custom-select2 form-control"
+                                        name="nilaiteknik"
+                                        style="width: 100%; height: 38px"
+                                      >
+                                        <option value="A">
+                                          Sangat Baik (A)
+                                        </option>
+                                        <option value="B">Baik (B)</option>
+                                        <option value="C">Kurang (C)</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label>Kedisiplinan Latihan :</label>
+                                      <select
+                                        class="custom-select2 form-control"
+                                        name="nilaidisiplin"
+                                        style="width: 100%; height: 38px"
+                                      >
+                                        <option value="Tapat Waktu">
+                                          Tepat Waktu
+                                        </option>
+                                        <option value="Sering Terlambat">
+                                          Sering Terlambat
+                                        </option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label>Media (Optional) :</label>
+                                      <input
+                                        type="file"
+                                        name="media"
+                                        class="form-control-file form-control"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label>Evaluasi Jurus :</label>
+                                      <textarea
+                                        class="form-control"
+                                        name="evaluasinote"
+                                      ></textarea>
+                                    </div>
+                                  </div>
+                                </div>
+                              </section>
+                              <p class="mb-30"></p>
+                              <button
+                                type="submit"
+                                id="success-modal-btn"
+                                class="btn btn-primary"
+                                data-toggle="modal"
+                                data-target="#success-modal"
+                                data-backdrop="static"
+                              >
+                                Simpan
+                              </button>
+                              <div
+                                class="modal fade"
+                                id="success-modal"
+                                tabindex="-1"
+                                role="dialog"
+                                aria-labelledby="exampleModalCenterTitle"
+                                aria-hidden="true"
+                              >
+                                <div
+                                  class="modal-dialog modal-dialog-centered max-width-400"
+                                  role="document"
+                                >
+                                  <div class="modal-content">
+                                    <div class="modal-body text-center font-18">
+                                      <h3 class="mb-20">Form Submitted!</h3>
+                                      <div class="mb-30 text-center">
+                                        <img
+                                          src="/vendors/images/success.png"
+                                        />
+                                      </div>
+                                      Berhasil Mengupdate Progress Data
+                                    </div>
+                                    <div
+                                      class="modal-footer justify-content-center"
+                                    >
+                                      <a
+                                        href="/progress/encode"
+                                        class="btn btn-primary"
+                                        >Done</a
+                                      >
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </form>
+                            </form>
+                          </div>
                         </div>
                       </div>
                     </div>

@@ -21,9 +21,9 @@ func main() {
 	initializers.DB.Exec("SELECT UUID()")
 	initializers.DB.AutoMigrate(
 		&models.User{},
-		&models.Post{},
 		&models.EncodePresensi{},
 		&models.DecodePresensi{},
+		&models.DecodeProgressLatihan{},
 		&models.EncodeProgressLatihan{},
 	)
 	fmt.Println("!! Migration complete")
