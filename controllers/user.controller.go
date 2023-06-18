@@ -38,7 +38,9 @@ func (uc *UserController) GetProfile(ctx *gin.Context) {
 		Acc:     currentUser.Acc,
 	}
 
-	ctx.HTML(http.StatusOK, "profile.html", gin.H{"Profile": userResponse})
+	ctx.HTML(http.StatusOK, "profile.html", gin.H{
+		"Profile": userResponse,
+	})
 }
 
 func (uc *UserController) UserDashboard(ctx *gin.Context) {
