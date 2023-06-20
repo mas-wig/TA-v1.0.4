@@ -80,7 +80,7 @@ func main() {
 	server.LoadHTMLGlob("./public/templates/*.html")
 
 	api := server.Group("/api")
-	AuthRouteController.AuthRoute(api)
+	AuthRouteController.AuthRouters(api)
 	UserRouteController.UserRouteProfile(api)
 	PostRouteController.PostRoute(api)
 	AbsensiRouteController.UserPrensensi(api)

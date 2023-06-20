@@ -63,6 +63,7 @@ func SendEmail(user *models.User, data *EmailData) {
 
 	template.ExecuteTemplate(&body, "verification.html", &data)
 
+
 	m := gomail.NewMessage()
 
 	m.SetHeader("From", from)

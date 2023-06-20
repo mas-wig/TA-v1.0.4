@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -188,4 +189,89 @@ func (ac *AuthController) VerifyEmail(ctx *gin.Context) {
 	ac.DB.Save(&updatedUser)
 
 	ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": "Email verified successfully"})
+}
+
+func (ac *AuthController) ForgotPassword(ctx *gin.Context) {
+	var payload *models.ForgotPasswordInput
+
+	if err := ctx.ShouldBind(&payload); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	// message := "You will receive a reset email if user with that email exist"
+
+	var user models.User
+	result := ac.DB.First(&user, "email = ?", strings.ToLower(payload.Email))
+	if result.Error != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Invalid email or Password"})
+		return
+	}
+
+	if !user.Verified {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"status": "error", "message": "Account not verified"})
+		return
+	}
+
+	config, err := initializers.LoadConfig(".")
+	if err != nil {
+		log.Fatal("Could not load config", err)
+	}
+
+	resetToken := randstr.String(20)
+
+	passwordResetToken := utils.Encode(resetToken)
+	user.PasswordResetToken = passwordResetToken
+	user.PasswordResetAt = time.Now().Add(time.Minute * 15)
+	ac.DB.Save(&user)
+
+	var firstName = user.FullName
+
+	if strings.Contains(firstName, " ") {
+		firstName = strings.Split(firstName, " ")[1]
+	}
+
+	emailData := utils.EmailData{
+		URL:       config.ClientOrigin + "/api/auth/resetpassword/" + resetToken,
+		FirstName: firstName,
+		Subject:   "Your password reset token (valid for 10min)",
+	}
+
+	utils.SendEmail(&user, &emailData)
+
+	ctx.HTML(http.StatusFound, "reset-password.html", gin.H{"Action": "/api/auth/resetpassword", "ResetToken": resetToken})
+
+}
+
+func (ac *AuthController) ResetPassword(ctx *gin.Context) {
+	var payload *models.ResetPasswordInput
+	resetToken := ctx.Params.ByName("resetToken")
+
+	if err := ctx.ShouldBind(&payload); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
+
+	if payload.Password != payload.PasswordConfirm {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Passwords do not match"})
+		return
+	}
+
+	hashedPassword, _ := utils.HashPassword(payload.Password)
+
+	passwordResetToken := utils.Encode(resetToken)
+
+	var updatedUser models.User
+	result := ac.DB.First(&updatedUser, "password_reset_token = ? AND password_reset_at > ?", passwordResetToken, time.Now())
+	if result.Error != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "The reset token is invalid or has expired"})
+		return
+	}
+
+	updatedUser.Password = hashedPassword
+	updatedUser.PasswordResetToken = ""
+	ac.DB.Save(&updatedUser)
+
+	ctx.SetCookie("token", "", -1, "/", "localhost", false, true)
+	ctx.Redirect(http.StatusFound, "/api/auth/signin")
 }

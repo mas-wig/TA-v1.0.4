@@ -8,20 +8,22 @@ import (
 )
 
 type User struct {
-	ID               string    `gorm:"type:varchar(36);default:uuid();primary_key"`
-	Email            string    `gorm:"type:varchar(255);uniqueIndex;not null"`
-	Username         string    `gorm:"type:varchar(255);not null"`
-	Password         string    `gorm:"type:varchar(255);not null"`
-	FullName         string    `gorm:"type:varchar(255);not null"`
-	Gender           string    `gorm:"type:enum('pria','wanita');not null"`
-	Address          string    `gorm:"type:text;not null"`
-	Verified         bool      `gorm:"not null"`
-	Photo            string    `gorm:"type:varchar(255);default:'default.png'"`
-	Role             string    `gorm:"type:varchar(255);not null"`
-	VerificationCode string    `gorm:"type:varchar(255)"`
-	Acc              bool      `gorm:"not null"`
-	CreatedAt        time.Time `gorm:"not null"`
-	UpdatedAt        time.Time `gorm:"not null"`
+	ID                 string `gorm:"type:varchar(36);default:uuid();primary_key"`
+	Email              string `gorm:"type:varchar(255);uniqueIndex;not null"`
+	Username           string `gorm:"type:varchar(255);not null"`
+	Password           string `gorm:"type:varchar(255);not null"`
+	FullName           string `gorm:"type:varchar(255);not null"`
+	Gender             string `gorm:"type:enum('pria','wanita');not null"`
+	Address            string `gorm:"type:text;not null"`
+	Verified           bool   `gorm:"not null"`
+	Photo              string `gorm:"type:varchar(255);default:'default.png'"`
+	Role               string `gorm:"type:varchar(255);not null"`
+	VerificationCode   string `gorm:"type:varchar(255)"`
+	PasswordResetToken string
+	PasswordResetAt    time.Time
+	Acc                bool      `gorm:"not null"`
+	CreatedAt          time.Time `gorm:"not null"`
+	UpdatedAt          time.Time `gorm:"not null"`
 }
 
 type SignUpInput struct {
@@ -55,4 +57,13 @@ type UserResponse struct {
 type UserResponseProfile struct {
 	FullName  string
 	PhotoPath string
+}
+
+type ForgotPasswordInput struct {
+	Email string `form:"email" binding:"required"`
+}
+
+type ResetPasswordInput struct {
+	Password        string `form:"password" binding:"required"`
+	PasswordConfirm string `form:"confirmpassword" binding:"required"`
 }
