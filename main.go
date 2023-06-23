@@ -19,9 +19,6 @@ var (
 	UserController      controllers.UserController
 	UserRouteController routes.UserRouteController
 
-	PostController      controllers.PostController
-	PostRouteController routes.PostRouteController
-
 	AbsensiController      controllers.AbsensiController
 	AbsensiRouteController routes.UserAbsensiController
 
@@ -45,9 +42,6 @@ func init() {
 
 	UserController = controllers.NewUserController(initializers.DB)
 	UserRouteController = routes.NewRouteUserController(UserController)
-
-	PostController = controllers.NewPostController(initializers.DB)
-	PostRouteController = routes.NewRoutePostController(PostController)
 
 	AbsensiController = controllers.NewAbsensiController(initializers.DB)
 	AbsensiRouteController = routes.NewAbsensiContoller(AbsensiController)
@@ -82,7 +76,6 @@ func main() {
 	api := server.Group("/api")
 	AuthRouteController.AuthRouters(api)
 	UserRouteController.UserRouteProfile(api)
-	PostRouteController.PostRoute(api)
 	AbsensiRouteController.UserPrensensi(api)
 
 	router := server.Group("/")

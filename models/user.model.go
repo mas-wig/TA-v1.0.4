@@ -5,10 +5,11 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type User struct {
-	ID                 string `gorm:"type:varchar(36);default:uuid();primary_key"`
+	ID                 string `gorm:"type:char(36);primary_key"`
 	Email              string `gorm:"type:varchar(255);uniqueIndex;not null"`
 	Username           string `gorm:"type:varchar(255);not null"`
 	Password           string `gorm:"type:varchar(255);not null"`
@@ -20,10 +21,15 @@ type User struct {
 	Role               string `gorm:"type:varchar(255);not null"`
 	VerificationCode   string `gorm:"type:varchar(255)"`
 	PasswordResetToken string
-	PasswordResetAt    time.Time
+	PasswordResetAt    time.Time `gorm:"not null"`
 	Acc                bool      `gorm:"not null"`
 	CreatedAt          time.Time `gorm:"not null"`
 	UpdatedAt          time.Time `gorm:"not null"`
+}
+
+func (note *User) BeforeCreate(tx *gorm.DB) (err error) {
+	note.ID = uuid.New().String()
+	return nil
 }
 
 type SignUpInput struct {

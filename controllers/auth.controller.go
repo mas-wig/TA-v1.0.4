@@ -63,18 +63,20 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	}
 
 	newUser := models.User{
-		Email:     strings.ToLower(payload.Email),
-		Username:  strings.ToLower(payload.Username),
-		Password:  hashedPassword,
-		FullName:  payload.FullName,
-		Gender:    payload.Gender,
-		Address:   payload.Address,
-		Verified:  false,
-		Photo:     photoURL,
-		Role:      roleUser,
-		Acc:       false,
-		CreatedAt: now,
-		UpdatedAt: now,
+		Email:              strings.ToLower(payload.Email),
+		Username:           strings.ToLower(payload.Username),
+		Password:           hashedPassword,
+		FullName:           payload.FullName,
+		Gender:             payload.Gender,
+		Address:            payload.Address,
+		Verified:           false,
+		Photo:              photoURL,
+		Role:               roleUser,
+		PasswordResetToken: "",
+		PasswordResetAt:    now,
+		Acc:                false,
+		CreatedAt:          now,
+		UpdatedAt:          now,
 	}
 
 	result := ac.DB.Create(&newUser)
@@ -199,10 +201,9 @@ func (ac *AuthController) ForgotPassword(ctx *gin.Context) {
 		return
 	}
 
-	// message := "You will receive a reset email if user with that email exist"
-
 	var user models.User
 	result := ac.DB.First(&user, "email = ?", strings.ToLower(payload.Email))
+
 	if result.Error != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Invalid email or Password"})
 		return
@@ -223,10 +224,10 @@ func (ac *AuthController) ForgotPassword(ctx *gin.Context) {
 	passwordResetToken := utils.Encode(resetToken)
 	user.PasswordResetToken = passwordResetToken
 	user.PasswordResetAt = time.Now().Add(time.Minute * 15)
+
 	ac.DB.Save(&user)
 
 	var firstName = user.FullName
-
 	if strings.Contains(firstName, " ") {
 		firstName = strings.Split(firstName, " ")[1]
 	}
@@ -239,9 +240,15 @@ func (ac *AuthController) ForgotPassword(ctx *gin.Context) {
 
 	utils.SendEmail(&user, &emailData)
 
-	ctx.HTML(http.StatusFound, "reset-password.html", gin.H{"Action": "/api/auth/resetpassword", "ResetToken": resetToken})
-
 }
+
+// func (ac *AuthController) ResetForm(ctx *gin.Context) {
+// 	currentUser := ctx.MustGet("currentUser").(models.User)
+// 	if currentUser.PasswordResetToken != {
+// 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
+// 	}
+// 	ctx.HTML(http.StatusOK, "reset-password.html", gin.H{"Action": "/api/auth/resetpassword", "ResetToken": resetToken})
+// }
 
 func (ac *AuthController) ResetPassword(ctx *gin.Context) {
 	var payload *models.ResetPasswordInput
