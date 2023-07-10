@@ -25,6 +25,7 @@ func (rc *AuthRouteController) AuthRouters(rg *gin.RouterGroup) {
 	router.GET("/verifyemail/:verificationCode", rc.authController.VerifyEmail)
 	router.POST("/forgotpassword", rc.authController.ForgotPassword)
 	router.POST("/resetpassword/:resetToken", rc.authController.ResetPassword)
+	router.GET("/resettoken/:newresetToken", rc.authController.GetResetPasswordToken)
 
 	router.GET("/signin", func(ctx *gin.Context) {
 		ctx.HTML(http.StatusOK, "login.html", gin.H{"endpoint": "/api/auth/login"})

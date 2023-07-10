@@ -93,9 +93,9 @@
               data-toggle="dropdown"
             >
               <span class="user-icon">
-                <img src="/vendors/images/photo1.jpg" alt="" />
+                <img src="{{.PhotoPath}}" alt="" />
               </span>
-              <span class="user-name">ross c. lopez</span>
+              <span class="user-name">{{.Fullname}}</span>
             </a>
             <div
               class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list"
@@ -121,7 +121,7 @@
             class="dark-logo"
           />
           <img
-src="/vendors/images/new-logo-test.png"
+            src="/vendors/images/new-logo-test.png"
             alt=""
             class="light-logo"
           />
@@ -147,7 +147,8 @@ src="/vendors/images/new-logo-test.png"
                 ><span class="mtext">Input Data</span>
               </a>
               <ul class="submenu">
-                <li><a href="/api/absen/form">Absensi</a></li><li><a href="/progress/form">Progress Latihan</a></li>
+                <li><a href="/api/absen/form">Absensi</a></li>
+                <li><a href="/progress/form">Progress Latihan</a></li>
               </ul>
             </li>
             <li class="dropdown">
@@ -156,7 +157,8 @@ src="/vendors/images/new-logo-test.png"
                 ><span class="mtext">Enkripsi</span>
               </a>
               <ul class="submenu">
-                <li><a href="/api/absen/encode">Absensi</a></li><li><a href="/progress/encode">Progress Siswa</a></li>
+                <li><a href="/api/absen/encode">Absensi</a></li>
+                <li><a href="/progress/encode">Progress Siswa</a></li>
               </ul>
             </li>
             <li class="dropdown">
@@ -165,7 +167,8 @@ src="/vendors/images/new-logo-test.png"
                 ><span class="mtext">Dekripsi</span>
               </a>
               <ul class="submenu">
-                <li><a href="/api/absen/decode">Absensi</a></li><li><a href="/progress/decode">Progress Siswa</a></li>
+                <li><a href="/api/absen/decode">Absensi</a></li>
+                <li><a href="/progress/decode">Progress Siswa</a></li>
               </ul>
             </li>
             <li>
@@ -177,11 +180,11 @@ src="/vendors/images/new-logo-test.png"
             <li>
               <a href="javascript:;" class="dropdown-toggle">
                 <span class="micon bi bi-file-pdf"></span
-                ><span class="mtext">Documentation</span>
+                ><span class="mtext">Dokumentasi</span>
               </a>
               <ul class="submenu">
-                <li><a href="introduction.html">Introduction</a></li>
-                <li><a href="getting-started.html">Getting Started</a></li>
+                <li><a href="/users/pengenalan">Introduction</a></li>
+                <li><a href="/users/getstart">Getting Started</a></li>
               </ul>
             </li>
             <li>
@@ -227,126 +230,33 @@ src="/vendors/images/new-logo-test.png"
           </div>
           <div class="pd-20 card-box mb-30">
             <h4 class="h4 text-blue mb-10">Getting Started</h4>
-            <div class="alert alert-primary" role="alert">
-              Note: we recomonded you to please make your one own css file & one
-              js files and add that in your page, so whenever the update of
-              Severny admin comes it does not affect your code.
-            </div>
-            <div class="alert alert-danger" role="alert">
-              If you are using css then no need to follow below steps. Just go
-              to the index.html and open that file in to the browser for desire
-              output.
-            </div>
-            <div class="alert alert-danger" role="alert">
-              If you are using scss and package managing then we have
-              compilation tool (gulp) for that please follow the below steps.
-            </div>
-            <div>
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item pt-20 pb-20">
-                  <h6 class="weight-400 d-flex">
-                    <i
-                      class="icon-copy dw dw-checked mr-2"
-                      data-color="#1b00ff"
-                    ></i>
-                    Install Node.js From
-                    <a
-                      href="https://nodejs.org/en/download/"
-                      class="ml-2"
-                      target="_blank"
-                      data-color="#1b00ff"
-                      >https://nodejs.org/en/download/</a
-                    >
-                  </h6>
-                </li>
-                <li class="list-group-item pt-20 pb-20">
-                  <h6 class="weight-400 d-flex">
-                    <i
-                      class="icon-copy dw dw-checked mr-2"
-                      data-color="#1b00ff"
-                    ></i>
-                    After that open command promt or any other terminal and go
-                    to Package Path.
-                  </h6>
-                </li>
-                <li class="list-group-item pt-20 pb-20">
-                  <h6 class="weight-400 d-flex">
-                    <i
-                      class="icon-copy dw dw-checked mr-2"
-                      data-color="#1b00ff"
-                    ></i>
-                    Npm is a default package manager for the JavaScript runtime
-                    environment Node.js. If you've already then update once.
-                  </h6>
-                  <div
-                    class="bg-dark py-2 px-3 ml-md-4 mt-md-3 text-white rounded-lg shadow"
-                  >
-                    <p class="mb-0">npm install --global npm@latest</p>
-                  </div>
-                  <div class="ml-md-4 mt-md-3 alert alert-success p-0">
-                    <div class="bg-success mb-0 text-white py-2 px-3">
-                      <p class="mb-0">
-                        To check weather is node succesfully install or not.
-                      </p>
-                    </div>
-                    <div class="p-3">
-                      <p class="mb-0 weight-500">npm --version</p>
-                    </div>
-                  </div>
-                </li>
-                <li class="list-group-item pt-20 pb-20">
-                  <h6 class="weight-400 d-flex">
-                    <i
-                      class="icon-copy dw dw-checked mr-2"
-                      data-color="#1b00ff"
-                    ></i>
-                    Gulp is a cross-platform, streaming task runner that lets
-                    developers automate many development tasks. To install gulp
-                    globally has inclue:
-                  </h6>
-                  <div
-                    class="bg-dark py-2 px-3 ml-md-4 mt-md-3 text-white rounded-lg shadow"
-                  >
-                    <p class="mb-0">npm install --global gulp-cli</p>
-                  </div>
-                  <div class="ml-md-4 mt-md-3 alert alert-success p-0">
-                    <div class="bg-success mb-0 text-white py-2 px-3">
-                      <p class="mb-0">
-                        If you have previously installed gulp then remove it.
-                      </p>
-                    </div>
-                    <div class="p-3">
-                      <p class="mb-0 weight-500">npm rm --global gulp</p>
-                    </div>
-                  </div>
-                  <div class="ml-md-4 mt-md-3 alert alert-success p-0">
-                    <div class="bg-success mb-0 text-white py-2 px-3">
-                      <p class="mb-0">
-                        To check weather is gulp succesfully install or not.
-                      </p>
-                    </div>
-                    <div class="p-3">
-                      <p class="mb-0 weight-500">gulp --version</p>
-                    </div>
-                  </div>
-                </li>
-                <li class="list-group-item pt-20 pb-20">
-                  <h6 class="weight-400 d-flex">
-                    <i
-                      class="icon-copy dw dw-checked mr-2"
-                      data-color="#1b00ff"
-                    ></i>
-                    Below Command will execute all the assets(js,css) to the
-                    dist folder separately.
-                  </h6>
-                  <div
-                    class="bg-dark py-2 px-3 ml-md-4 mt-md-3 text-white rounded-lg shadow"
-                  >
-                    <p class="mb-0">gulp</p>
-                  </div>
-                </li>
-              </ul>
-            </div>
+            Langkah 1: Registrasi Buka halaman utama website kami. Klik tombol
+            "Daftar" atau "Registrasi". Isi formulir pendaftaran dengan
+            informasi yang diperlukan, seperti username, password, email, foto
+            profil, alamat, dan nama lengkap. Klik "Daftar" untuk mengirimkan
+            formulir pendaftaran. Langkah 2: Verifikasi Akun Setelah mendaftar,
+            Anda akan menerima email verifikasi dari kami. Buka email tersebut
+            dan ikuti petunjuk untuk melakukan verifikasi akun. Setelah berhasil
+            diverifikasi, Anda siap untuk menggunakan fitur-fitur website kami.
+            Langkah 3: Login Kembali ke halaman utama website kami. Masukkan
+            username dan password yang telah Anda daftarkan. Klik tombol "Login"
+            untuk masuk ke akun Anda. Langkah 4: Enkripsi Data Setelah login,
+            Anda akan diarahkan ke dashboard atau menu utama. Di menu sidebar,
+            temukan opsi "Enkripsi" atau "Encode" (sesuai dengan istilah yang
+            digunakan pada website Anda). Pilih opsi tersebut, dan Anda akan
+            dibawa ke halaman enkripsi data. Masukkan data yang ingin Anda
+            enkripsi ke dalam kolom yang disediakan. Klik tombol "Enkripsi" atau
+            "Encode" untuk memulai proses enkripsi. Langkah 5: Dekripsi Data
+            Jika Anda ingin mendekripsi data yang telah dienkripsi sebelumnya,
+            kembali ke dashboard atau menu utama. Temukan opsi "Dekripsi" atau
+            "Decode" (sesuai dengan istilah yang digunakan pada website Anda) di
+            menu sidebar. Pilih opsi tersebut, dan Anda akan dibawa ke halaman
+            dekripsi data. Masukkan data terenkripsi ke dalam kolom yang
+            disediakan. Pastikan Anda memiliki private key (kunci pribadi) yang
+            valid untuk mendekripsi data. Klik tombol "Dekripsi" atau "Decode"
+            untuk memulai proses dekripsi. Langkah 6: Akses Data Asli Jika Anda
+            telah menggunakan private key yang valid, maka hasil dekripsi akan
+            ditampilkan, dan Anda dapat melihat data asli.
           </div>
         </div>
       </div>

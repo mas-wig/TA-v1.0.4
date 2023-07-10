@@ -32,7 +32,6 @@ func (abc *AbsensiController) GetInputPresensi(ctx *gin.Context) {
 		"Fullname":  userResponse.FullName,
 		"PhotoPath": userResponse.PhotoPath,
 	})
-
 }
 
 func (abc *AbsensiController) CreateAbsensi(ctx *gin.Context) {
@@ -67,14 +66,18 @@ func (abc *AbsensiController) CreateAbsensi(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": result.Error.Error()})
 		return
 	}
-
 	ctx.Redirect(http.StatusFound, "/api/absen/encode")
-
 }
 
 func (abc *AbsensiController) GetAllEncodeAbsensi(ctx *gin.Context) {
 	var allPresensi []models.EncodePresensi
 	results := abc.DB.Find(&allPresensi)
+
+	currentUser := ctx.MustGet("currentUser").(models.User)
+	userResponse := &models.UserResponseProfile{
+		FullName:  currentUser.FullName,
+		PhotoPath: currentUser.Photo,
+	}
 
 	if results.Error != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": results.Error})
@@ -82,7 +85,9 @@ func (abc *AbsensiController) GetAllEncodeAbsensi(ctx *gin.Context) {
 	}
 
 	ctx.HTML(http.StatusOK, "encoded-absensi.html", gin.H{
-		"Absensi": allPresensi,
+		"Absensi":   allPresensi,
+		"Fullname":  userResponse.FullName,
+		"PhotoPath": userResponse.PhotoPath,
 	})
 }
 
@@ -90,13 +95,20 @@ func (abc *AbsensiController) GetAllDecodeAbsensi(ctx *gin.Context) {
 	var allPresensi []models.DecodePresensi
 	results := abc.DB.Find(&allPresensi)
 
+	currentUser := ctx.MustGet("currentUser").(models.User)
+	userResponse := &models.UserResponseProfile{
+		FullName:  currentUser.FullName,
+		PhotoPath: currentUser.Photo,
+	}
 	if results.Error != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": results.Error})
 		return
 	}
 
 	ctx.HTML(http.StatusOK, "decoded-absensi.html", gin.H{
-		"Absensi": allPresensi,
+		"Absensi":   allPresensi,
+		"Fullname":  userResponse.FullName,
+		"PhotoPath": userResponse.PhotoPath,
 	})
 }
 
@@ -207,6 +219,7 @@ func (abc *AbsensiController) UpdatePresensiByID(ctx *gin.Context) {
 		Kehadiran:      payload.Kehadiran,
 		InformasiMedis: payload.InformasiMedis,
 	}
+
 	abc.DB.Model(&newUpdatePresensi).Updates(updateDecodeData)
 	ctx.Redirect(http.StatusFound, "/api/absen/decode")
 }

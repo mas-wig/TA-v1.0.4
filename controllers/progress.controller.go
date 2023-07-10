@@ -43,6 +43,7 @@ func (pc *ProgressController) CreateNewProgress(ctx *gin.Context) {
 		return
 	}
 
+
 	currentUser := ctx.MustGet("currentUser").(models.User)
 	userID, err := uuid.Parse(currentUser.ID)
 	if err != nil {

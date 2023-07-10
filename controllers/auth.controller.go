@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/base64"
 	"log"
 	"net/http"
 	"strings"
@@ -90,17 +91,12 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	}
 
 	config, _ := initializers.LoadConfig(".")
-
-	// Generate Verification Code
 	code := randstr.String(20)
-
 	verificationCode := utils.Encode(code)
-
-	// Update User in Database
 	newUser.VerificationCode = verificationCode
-	ac.DB.Save(newUser)
-
 	var firstName = newUser.Username
+
+	ac.DB.Save(newUser)
 
 	if strings.Contains(firstName, " ") {
 		firstName = strings.Split(firstName, " ")[1]
@@ -109,13 +105,11 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	emailData := utils.EmailData{
 		URL:       config.ClientOrigin + "/api/auth/verifyemail/" + code,
 		FirstName: firstName,
-		Subject:   "Your account verification code",
+		Subject:   "Link verifikasi akun anda..",
 	}
-
 	utils.SendEmail(&newUser, &emailData)
 
-	message := "We sent an email with a verification code to " + newUser.Email
-	ctx.JSON(http.StatusCreated, gin.H{"status": "success", "message": message})
+	ctx.Redirect(http.StatusFound, "/api/auth/signin")
 }
 
 // Login
@@ -125,6 +119,7 @@ func (ac *AuthController) SignInUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return
 	}
+
 	var user models.User
 
 	if err := ac.DB.Where("email = ? AND role = ?", payload.Email, payload.Role).First(&user).Error; err != nil {
@@ -190,7 +185,7 @@ func (ac *AuthController) VerifyEmail(ctx *gin.Context) {
 	updatedUser.Verified = true
 	ac.DB.Save(&updatedUser)
 
-	ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": "Email verified successfully"})
+	ctx.HTML(http.StatusOK, "verifikasi.html", nil)
 }
 
 func (ac *AuthController) ForgotPassword(ctx *gin.Context) {
@@ -223,7 +218,7 @@ func (ac *AuthController) ForgotPassword(ctx *gin.Context) {
 
 	passwordResetToken := utils.Encode(resetToken)
 	user.PasswordResetToken = passwordResetToken
-	user.PasswordResetAt = time.Now().Add(time.Minute * 15)
+	user.PasswordResetAt = time.Now().Add(time.Minute * 60)
 
 	ac.DB.Save(&user)
 
@@ -233,22 +228,24 @@ func (ac *AuthController) ForgotPassword(ctx *gin.Context) {
 	}
 
 	emailData := utils.EmailData{
-		URL:       config.ClientOrigin + "/api/auth/resetpassword/" + resetToken,
+		URL:       config.ClientOrigin + "/api/auth/resettoken/" + resetToken,
 		FirstName: firstName,
-		Subject:   "Your password reset token (valid for 10min)",
+		Subject:   "Password reset token anda (valid untuk 10min)",
 	}
-
 	utils.SendEmail(&user, &emailData)
-
+	ctx.Redirect(http.StatusFound, "/api/auth/signin")
 }
 
-// func (ac *AuthController) ResetForm(ctx *gin.Context) {
-// 	currentUser := ctx.MustGet("currentUser").(models.User)
-// 	if currentUser.PasswordResetToken != {
-// 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
-// 	}
-// 	ctx.HTML(http.StatusOK, "reset-password.html", gin.H{"Action": "/api/auth/resetpassword", "ResetToken": resetToken})
-// }
+func (ac *AuthController) GetResetPasswordToken(ctx *gin.Context) {
+	resetToken := ctx.Params.ByName("newresetToken")
+	var updatedUser models.User
+	result := ac.DB.First(&updatedUser, "password_reset_token=?", base64.StdEncoding.EncodeToString([]byte(resetToken)))
+	if result.Error != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Invalid verification code or user doesn't exists"})
+		return
+	}
+	ctx.HTML(http.StatusFound, "reset-password.html", gin.H{"ResetToken": resetToken})
+}
 
 func (ac *AuthController) ResetPassword(ctx *gin.Context) {
 	var payload *models.ResetPasswordInput
@@ -279,6 +276,13 @@ func (ac *AuthController) ResetPassword(ctx *gin.Context) {
 	updatedUser.PasswordResetToken = ""
 	ac.DB.Save(&updatedUser)
 
-	ctx.SetCookie("token", "", -1, "/", "localhost", false, true)
+	time.Sleep(3 * time.Second)
 	ctx.Redirect(http.StatusFound, "/api/auth/signin")
+	ctx.SetCookie("token", "", -1, "/api/auth/signin", "localhost", false, true)
 }
+
+// TODO: Keknya susah kalo tak implentasi sekerang fitur ginian
+
+// func (ac *AuthController) SignUpWithGoogle() {
+//
+// }

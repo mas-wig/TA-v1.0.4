@@ -34,7 +34,6 @@ func init() {
 	if err != nil {
 		log.Fatal(".env file tidak ditemukan", err)
 	}
-
 	initializers.ConnectDB(&config)
 
 	AuthController = controllers.NewAuthController(initializers.DB)

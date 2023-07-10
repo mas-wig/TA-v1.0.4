@@ -103,9 +103,9 @@
               data-toggle="dropdown"
             >
               <span class="user-icon">
-                <img src="/vendors/images/photo1.jpg" alt="" />
+                <img src="{{.PhotoPath}}" alt="" />
               </span>
-              <span class="user-name">ross c. lopez</span>
+              <span class="user-name">{{.Fullname}}</span>
             </a>
             <div
               class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list"
@@ -190,11 +190,11 @@
             <li>
               <a href="javascript:;" class="dropdown-toggle">
                 <span class="micon bi bi-file-pdf"></span
-                ><span class="mtext">Documentation</span>
+                ><span class="mtext">Dokumentasi</span>
               </a>
               <ul class="submenu">
-                <li><a href="introduction.html">Introduction</a></li>
-                <li><a href="getting-started.html">Getting Started</a></li>
+                                <li><a href="/users/pengenalan">Introduction</a></li>
+                                <li><a href="/users/getstart">Getting Started</a></li>
               </ul>
             </li>
             <li>
@@ -219,7 +219,7 @@
             <div class="row">
               <div class="col-md-6 col-sm-12">
                 <div class="title">
-                  <h4>DataTable</h4>
+                  <h4>Absensi</h4>
                 </div>
                 <nav aria-label="breadcrumb" role="navigation">
                   <ol class="breadcrumb">
@@ -227,7 +227,7 @@
                       <a href="/users/dashboard">Home</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                      DataTable
+                      Absensi
                     </li>
                   </ol>
                 </nav>
@@ -237,7 +237,7 @@
           <!-- Simple Datatable start -->
           <div class="card-box mb-30">
             <div class="pd-20">
-              <h4 class="text-blue h4">Data Table Simple</h4>
+              <h4 class="text-blue h4">Table Encode Absensi</h4>
             </div>
             <div class="pb-20">
               <table class="data-table table stripe hover nowrap">
@@ -247,7 +247,7 @@
                     <th>Hari</th>
                     <th>Lokasi</th>
                     <th>Tanggal</th>
-                    <th>kehadiran</th>
+                    <th>Kehadiran</th>
                     <th>Informasi Medis</th>
                     <th class="datatable-nosort">Action</th>
                   </tr>

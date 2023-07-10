@@ -66,7 +66,7 @@ func (ac *AdminController) GetAllUserList(ctx *gin.Context) {
 		return
 	}
 
-	ctx.HTML(http.StatusOK, "user-acc.html", gin.H{
+	ctx.HTML(http.StatusOK, "user-list.html", gin.H{
 		"Users": allUsers,
 	})
 }

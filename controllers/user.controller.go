@@ -54,3 +54,27 @@ func (uc *UserController) UserDashboard(ctx *gin.Context) {
 		"PhotoPath": userResponse.PhotoPath,
 	})
 }
+
+func (uc *UserController) Introduction(ctx *gin.Context) {
+	currentUser := ctx.MustGet("currentUser").(models.User)
+	userResponse := &models.UserResponseProfile{
+		FullName:  currentUser.FullName,
+		PhotoPath: currentUser.Photo,
+	}
+	ctx.HTML(http.StatusOK, "introduction.html", gin.H{
+		"Fullname":  userResponse.FullName,
+		"PhotoPath": userResponse.PhotoPath,
+	})
+}
+
+func (uc *UserController) GetStarted(ctx *gin.Context) {
+	currentUser := ctx.MustGet("currentUser").(models.User)
+	userResponse := &models.UserResponseProfile{
+		FullName:  currentUser.FullName,
+		PhotoPath: currentUser.Photo,
+	}
+	ctx.HTML(http.StatusOK, "getting-started.html", gin.H{
+		"Fullname":  userResponse.FullName,
+		"PhotoPath": userResponse.PhotoPath,
+	})
+}

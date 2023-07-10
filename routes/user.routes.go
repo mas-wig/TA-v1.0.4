@@ -22,4 +22,6 @@ func (uc *UserRouteController) UserRouteProfile(rg *gin.RouterGroup) {
 func (uc *UserRouteController) UserRouteDashboard(rg *gin.RouterGroup) {
 	router := rg.Group("users")
 	router.GET("/dashboard", middleware.DeserializeUser(), uc.userController.UserDashboard)
+	router.GET("/pengenalan", middleware.DeserializeUser(), uc.userController.Introduction)
+	router.GET("/getstart", middleware.DeserializeUser(), uc.userController.GetStarted)
 }

@@ -25,5 +25,5 @@ func main() {
 		&models.DecodeProgressLatihan{},
 		&models.EncodeProgressLatihan{},
 	)
-	fmt.Println("!! Migration complete")
+	fmt.Println("Migrasi SQL Selesai")
 }

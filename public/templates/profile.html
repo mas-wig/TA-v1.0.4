@@ -98,9 +98,9 @@
               data-toggle="dropdown"
             >
               <span class="user-icon">
-                <img src="/vendors/images/photo1.jpg" alt="" />
+                <img src="{{.Profile.Photo}}" alt="" />
               </span>
-              <span class="user-name">ross c. lopez</span>
+              <span class="user-name">{{.Fullname}}</span>
             </a>
             <div
               class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list"
@@ -185,11 +185,11 @@
             <li>
               <a href="javascript:;" class="dropdown-toggle">
                 <span class="micon bi bi-file-pdf"></span
-                ><span class="mtext">Documentation</span>
+                ><span class="mtext">Dokumentasi</span>
               </a>
               <ul class="submenu">
-                <li><a href="introduction.html">Introduction</a></li>
-                <li><a href="getting-started.html">Getting Started</a></li>
+                <li><a href="/users/pengenalan">Introduction</a></li>
+                <li><a href="/users/getstart">Getting Started</a></li>
               </ul>
             </li>
             <li>
@@ -241,11 +241,7 @@
                     class="edit-avatar"
                     ><i class="fa fa-pencil"></i
                   ></a>
-                  <img
-                    src="/vendors/images/photo1.jpg"
-                    alt=""
-                    class="avatar-photo"
-                  />
+                  <img src="{{.Profile.Photo}}" alt="" class="avatar-photo" />
                   <div
                     class="modal fade"
                     id="modal"
@@ -263,7 +259,7 @@
                           <div class="img-container">
                             <img
                               id="image"
-                              src="/vendors/images/photo2.jpg"
+                              src="{{.Profile.Photo}}"
                               alt="Picture"
                             />
                           </div>
@@ -286,29 +282,17 @@
                     </div>
                   </div>
                 </div>
-                <h5 class="text-center h5 mb-0">Ross C. Lopez</h5>
-                <p class="text-center text-muted font-14">
-                  Lorem ipsum dolor sit amet
-                </p>
+                <h5 class="text-center h5 mb-0">{{.Profile.Name}}</h5>
                 <div class="profile-info">
-                  <h5 class="mb-20 h5 text-blue">Contact Information</h5>
+                  <h5 class="mb-20 h5 text-blue">Informasi user</h5>
                   <ul>
                     <li>
-                      <span>Email Address:</span>
-                      FerdinandMChilds@test.com
+                      <span>Alamat Email</span>
+                      {{.Profile.Email}}
                     </li>
                     <li>
-                      <span>Phone Number:</span>
-                      619-229-0054
-                    </li>
-                    <li>
-                      <span>Country:</span>
-                      America
-                    </li>
-                    <li>
-                      <span>Address:</span>
-                      1807 Holden Street<br />
-                      San Diego, CA 92115
+                      <span>Alamat Lengkap</span>
+                      {{.Profile.Address}}
                     </li>
                   </ul>
                 </div>
@@ -330,7 +314,7 @@
                             <ul class="profile-edit-list row">
                               <li class="weight-500 col-md-12">
                                 <h4 class="text-blue h5 mb-20">
-                                  Edit Your Personal Setting
+                                  Data Personalmu
                                 </h4>
 
                                 <div class="form-group">
@@ -363,14 +347,6 @@
                                     class="form-control form-control-lg"
                                     type="text"
                                     value="{{.Profile.Role}}"
-                                  />
-                                </div>
-
-                                <div class="form-group">
-                                  <label>Address</label>
-                                  <input
-                                    class="form-control"
-                                    value="{{.Profile.Address}}"
                                   />
                                 </div>
 
