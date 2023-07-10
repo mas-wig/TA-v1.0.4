@@ -82,5 +82,7 @@ func main() {
 	AdminRouteController.AdminRoutes(router)
 	ProgressRouteController.ProgressRoutes(router)
 
+	routes.FormUsers(router)
+
 	log.Fatal(server.Run(":" + config.ServerPort))
 }

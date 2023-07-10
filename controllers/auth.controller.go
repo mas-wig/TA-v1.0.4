@@ -160,7 +160,7 @@ func (ac *AuthController) SignInUser(ctx *gin.Context) {
 // Logout
 func (ac *AuthController) LogoutUser(ctx *gin.Context) {
 	ctx.SetCookie("token", "", -1, "/", "localhost", false, true)
-	ctx.Redirect(http.StatusFound, "/api/auth/login")
+	ctx.Redirect(http.StatusFound, "/login")
 }
 
 // Verify Email
