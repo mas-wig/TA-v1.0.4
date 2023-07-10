@@ -7,28 +7,21 @@ import (
 )
 
 type Config struct {
-	DBHost         string `mapstructure:"MYSQL_HOST"`
-	DBUserName     string `mapstructure:"MYSQL_USER"`
-	DBUserPassword string `mapstructure:"MYSQL_PASSWORD"`
-	DBName         string `mapstructure:"MYSQL_DB"`
-	DBPort         string `mapstructure:"MYSQL_PORT"`
-	ServerPort     string `mapstructure:"PORT"`
-
-	ClientOrigin string `mapstructure:"CLIENT_ORIGIN"`
-
+	ClientOrigin   string        `mapstructure:"CLIENT_ORIGIN"`
+	EmailFrom      string        `mapstructure:"EMAIL_FROM"`
+	DBUserPassword string        `mapstructure:"MYSQL_PASSWORD"`
+	DBName         string        `mapstructure:"MYSQL_DB"`
+	DBPort         string        `mapstructure:"MYSQL_PORT"`
+	ServerPort     string        `mapstructure:"PORT"`
+	DBUserName     string        `mapstructure:"MYSQL_USER"`
+	SMTPUser       string        `mapstructure:"SMTP_USER"`
+	DBHost         string        `mapstructure:"MYSQL_HOST"`
+	SMTPPass       string        `mapstructure:"SMTP_PASS"`
 	TokenSecret    string        `mapstructure:"TOKEN_SECRET"`
-	TokenExpiresIn time.Duration `mapstructure:"TOKEN_EXPIRED_IN"`
+	SMTPHost       string        `mapstructure:"SMTP_HOST"`
 	TokenMaxAge    int           `mapstructure:"TOKEN_MAXAGE"`
-
-	EmailFrom string `mapstructure:"EMAIL_FROM"`
-	SMTPHost  string `mapstructure:"SMTP_HOST"`
-	SMTPPass  string `mapstructure:"SMTP_PASS"`
-	SMTPPort  int    `mapstructure:"SMTP_PORT"`
-	SMTPUser  string `mapstructure:"SMTP_USER"`
-
-	// GoogleClientID         string `mapstructure:"GOOGLE_OAUTH_CLIENT_ID"`
-	// GoogleClientSecret     string `mapstructure:"GOOGLE_OAUTH_CLIENT_SECRET"`
-	// GoogleOAuthRedirectURL string `mapstructure:"GOOGLE_OAUTH_REDIRECT_URL"`
+	SMTPPort       int           `mapstructure:"SMTP_PORT"`
+	TokenExpiresIn time.Duration `mapstructure:"TOKEN_EXPIRED_IN"`
 }
 
 func LoadConfig(path string) (config Config, err error) {

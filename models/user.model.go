@@ -9,22 +9,22 @@ import (
 )
 
 type User struct {
-	ID                 string    `gorm:"type:char(36);primary_key"`
-	Email              string    `gorm:"type:varchar(255);uniqueIndex;not null"`
-	Username           string    `gorm:"type:varchar(255);not null"`
-	Password           string    `gorm:"type:varchar(255);not null"`
+	PasswordResetAt    time.Time `gorm:"not null"`
+	UpdatedAt          time.Time `gorm:"not null"`
+	CreatedAt          time.Time `gorm:"not null"`
 	FullName           string    `gorm:"type:varchar(255);not null"`
+	ID                 string    `gorm:"type:char(36);primary_key"`
 	Gender             string    `gorm:"type:enum('pria','wanita');not null"`
 	Address            string    `gorm:"type:text;not null"`
-	Verified           bool      `gorm:"not null"`
 	Photo              string    `gorm:"type:varchar(255);default:'user'"`
 	Role               string    `gorm:"type:varchar(255);not null"`
 	VerificationCode   string    `gorm:"type:varchar(255)"`
 	PasswordResetToken string    `gorm:"not null"`
-	PasswordResetAt    time.Time `gorm:"not null"`
+	Password           string    `gorm:"type:varchar(255);not null"`
+	Username           string    `gorm:"type:varchar(255);not null"`
+	Email              string    `gorm:"type:varchar(255);uniqueIndex;not null"`
+	Verified           bool      `gorm:"not null"`
 	Acc                bool      `gorm:"not null"`
-	CreatedAt          time.Time `gorm:"not null"`
-	UpdatedAt          time.Time `gorm:"not null"`
 }
 
 func (note *User) BeforeCreate(tx *gorm.DB) (err error) {
@@ -51,12 +51,12 @@ type SignInInput struct {
 }
 
 type UserResponse struct {
-	ID      uuid.UUID `json:"id,omitempty"`
-	Name    string    `json:"name,omitempty"`
-	Email   string    `json:"email,omitempty"`
-	Role    string    `json:"role,omitempty"`
-	Photo   string    `json:"photo,omitempty"`
+	Name    string `json:"name,omitempty"`
+	Email   string `json:"email,omitempty"`
+	Role    string `json:"role,omitempty"`
+	Photo   string `json:"photo,omitempty"`
 	Address string
+	ID      uuid.UUID `json:"id,omitempty"`
 	Acc     bool
 }
 
