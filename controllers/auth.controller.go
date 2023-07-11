@@ -29,18 +29,18 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	var payload *models.SignUpInput
 
 	if err := ctx.ShouldBind(&payload); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail 1", "message": err.Error()})
+		ctx.HTML(http.StatusBadRequest, "400.html", nil)
 		return
 	}
 
 	if payload.Password != payload.PasswordConfirm {
-		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail 2", "message": "Passwords do not match"})
+		ctx.HTML(http.StatusBadRequest, "400.html", nil)
 		return
 	}
 
 	hashedPassword, err := utils.HashPassword(payload.Password)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error 1", "message": err.Error()})
+		ctx.HTML(http.StatusBadGateway, "500.html", nil)
 		return
 	}
 
@@ -48,7 +48,7 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	if payload.Photo != nil {
 		url, err := utils.SaveUploadedFile(payload.Photo)
 		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{"status": "error 2", "message": err.Error()})
+			ctx.HTML(http.StatusBadGateway, "500.html", nil)
 			return
 		}
 		photoURL = url
@@ -109,7 +109,7 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	}
 	utils.SendEmail(&newUser, &emailData)
 
-	ctx.Redirect(http.StatusFound, "/api/auth/signin")
+	ctx.Redirect(http.StatusFound, "/login")
 }
 
 // Login
@@ -233,7 +233,7 @@ func (ac *AuthController) ForgotPassword(ctx *gin.Context) {
 		Subject:   "Password reset token anda (valid untuk 10min)",
 	}
 	utils.SendEmail(&user, &emailData)
-	ctx.Redirect(http.StatusFound, "/api/auth/signin")
+	ctx.Redirect(http.StatusFound, "/login")
 }
 
 func (ac *AuthController) GetResetPasswordToken(ctx *gin.Context) {
@@ -277,8 +277,8 @@ func (ac *AuthController) ResetPassword(ctx *gin.Context) {
 	ac.DB.Save(&updatedUser)
 
 	time.Sleep(3 * time.Second)
-	ctx.Redirect(http.StatusFound, "/api/auth/signin")
-	ctx.SetCookie("token", "", -1, "/api/auth/signin", "localhost", false, true)
+	ctx.Redirect(http.StatusFound, "/login")
+	ctx.SetCookie("token", "", -1, "/login", "localhost", false, true)
 }
 
 // TODO: Keknya susah kalo tak implentasi sekerang fitur ginian

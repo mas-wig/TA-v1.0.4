@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <!-- Basic Page Info -->
@@ -193,8 +193,8 @@
                 ><span class="mtext">Dokumentasi</span>
               </a>
               <ul class="submenu">
-                                <li><a href="/users/pengenalan">Introduction</a></li>
-                                <li><a href="/users/getstart">Getting Started</a></li>
+                <li><a href="/users/pengenalan">Pengenalan</a></li>
+                <li><a href="/users/getstart">Penggunaan</a></li>
               </ul>
             </li>
             <li>
@@ -280,14 +280,10 @@
                             class="dropdown-item"
                             href="#"
                             data-toggle="modal"
-                            data-target="#modal-update-absen"
+                            data-target="#modal-update-progress"
                             ><i class="dw dw-edit2"> </i>
                             Update
                           </a>
-
-                          <a class="dropdown-item" href="#"
-                            ><i class="dw dw-eye"></i> View</a
-                          >
                           <a
                             class="dropdown-item"
                             href="#"
@@ -323,8 +319,11 @@
                               Apakah anda yakin ingin menghapus permanen data
                               progress anda!
                             </p>
-                            <input type="submit" value ="Ok" class="btn
-                            btn-light" / >
+                            <input
+                              type="submit"
+                              value="Ok"
+                              class="btn btn-light"
+                            />
                           </div>
                         </form>
                       </div>
@@ -334,7 +333,7 @@
                   <!-- Modal Update -->
                   <div
                     class="modal fade"
-                    id="modal-update-absen"
+                    id="modal-update-progress"
                     tabindex="-1"
                     role="dialog"
                     aria-labelledby="myLargeModalLabel"
@@ -480,7 +479,7 @@
                                       class="modal-footer justify-content-center"
                                     >
                                       <a
-                                        href="/progress/encode"
+                                        href="/progress/decode"
                                         class="btn btn-primary"
                                         >Done</a
                                       >

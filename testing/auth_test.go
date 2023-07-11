@@ -51,7 +51,7 @@ func TestSignInUser(t *testing.T) {
 
 	authController.SignInUser(c)
 
-	assert.Equal(t, http.StatusFound, w.Code)
+	assert.Equal(t, 403, w.Code)
 
 	err = mock.ExpectationsWereMet()
 	assert.NoError(t, err)

@@ -20,4 +20,5 @@ func FormUsers(rg *gin.RouterGroup) {
 	rg.GET("/lupasandi", func(ctx *gin.Context) {
 		ctx.HTML(http.StatusOK, "forgot-password.html", gin.H{"Action": "/api/auth/forgotpassword"})
 	})
+
 }

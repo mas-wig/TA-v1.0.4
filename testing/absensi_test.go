@@ -12,12 +12,13 @@ import (
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/mas-wig/ta-v1.0.4/controllers"
-	"github.com/mas-wig/ta-v1.0.4/models"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+
+	"github.com/mas-wig/ta-v1.0.4/controllers"
+	"github.com/mas-wig/ta-v1.0.4/models"
 )
 
 func TestEncode(t *testing.T) {
